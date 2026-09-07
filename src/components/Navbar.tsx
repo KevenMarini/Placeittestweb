@@ -45,7 +45,14 @@ export default function Navbar() {
         </div>
 
         {/* Right Side */}
-        <div>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/announcements"
+            className="flex items-center justify-center w-10 h-10 bg-white border-2 border-ink rounded-full shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:bg-neon-yellow hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-all -translate-y-1 hover:-translate-y-2 group"
+            title="Announcements"
+          >
+            <span className="text-xl group-hover:scale-110 transition-transform">📢</span>
+          </Link>
           <Link
             href="/register"
             className="font-marker text-xl font-bold text-ink bg-neon-cyan px-6 py-2 wobbly-border-alt hover:bg-neon-pink transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] -translate-y-1 hover:-translate-y-2 inline-block"
