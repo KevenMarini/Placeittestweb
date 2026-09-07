@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { mockStatements } from "@/data/statements";
 
 const domains = [
   { id: "iot-aiml", name: "IOT / AI / ML" },
@@ -13,33 +14,6 @@ const domains = [
   { id: "open", name: "Open Statements" },
 ];
 
-const mockStatements = {
-  "hardware": [
-    { id: "Track 1", title: "Battery Zero", desc: "Design an embedded hardware architecture that harvests ambient energy and intelligently duty-cycles computational and sensing workloads so the node theoretically sustains indefinite operation without ever requiring a battery swap." },
-    { id: "Track 2", title: "The Silent Saboteur", desc: "Develop a robust, hardware-level verification scheme that enables an embedded system to cryptographically prove its own physical authenticity and silicon integrity before being granted network or system access." },
-    { id: "Track 3", title: "One Board, Infinite Selves", desc: "Conceptualize an adaptable, self-reconfiguring embedded hardware platform that dynamically alters its interconnects and routing to serve fundamentally different application roles." },
-    { id: "Track 4", title: "Ghost in the Machine", desc: "Implement lightweight, on-chip or on-board edge-sensing and anomaly-detection techniques that allow a microcontroller to monitor its own component health, predict impending hardware failure, and enact fail-safe fallbacks in real time." },
-    { id: "Track 5", title: "Whispering Wires", desc: "Reinvent physical-layer embedded communication to enable remote nodes to reliably broadcast telemetry data across substantial distances while operating on near-zero power margins." },
-    { id: "Track 6", title: "The Shape-Shifting Chip", desc: "Structure an accessible silicon design paradigm or modular hardware platform that empowers small engineering teams to achieve domain-specific acceleration without bearing prohibitive fabrication costs." },
-    { id: "Track 7", title: "Hardware That Forgets Nothing, Reveals Nothing", desc: "Design embedded hardware circuits and PCB layouts that enforce privacy and anti-tamper security directly at the physical layer, making systems inherently immune to side-channel eavesdropping and physical extraction." },
-    { id: "Track 8", title: "The Last-Mile Machine", desc: "Design an embedded system architecture for infrastructure that is radically serviceable, self-diagnosing, and engineered to guide non-technical community members through troubleshooting and field repairs." },
-    { id: "Track 9", title: "Silicon Empathy", desc: "How can an embedded device accurately deduce and respond to human physiological or affective states using minimal, privacy-preserving physical sensors, without relying on invasive optical tracking or cloud-based processing?" },
-    { id: "Track 10", title: "The Vanishing Interface", desc: "Reinvent common physical interfaces so that interaction requires zero conscious learning curve and naturally blends into everyday human motion." }
-  ],
-  "iot-aiml": [
-    { id: "Track 1", title: "The Wasted Resource", desc: "How can we help institutions understand when, where and why resources are being unnecessarily consumed, and enable them to reduce this waste without negatively affecting the people using these facilities?" },
-    { id: "Track 2", title: "Before the Breakdown", desc: "How can we help people recognize that a machine may be developing a problem before it becomes a costly failure or causes disruption?" },
-    { id: "Track 3", title: "Every Drop Matters", desc: "How can we help farmers make better water-management decisions while reducing unnecessary water usage and ensuring that crops receive what they need?" },
-    { id: "Track 4", title: "The Adaptive Campus", desc: "How can we make campus facilities respond intelligently to how they are actually being used, while improving efficiency and maintaining a good experience for students and staff?" },
-    { id: "Track 5", title: "The Crowded Campus", desc: "How can we help campuses anticipate and manage crowding before it becomes a major inconvenience or safety concern?" },
-    { id: "Track 6", title: "Where Did I Leave It?", desc: "How can we make it significantly easier for people to find, identify or recover misplaced belongings in large shared environments?" },
-    { id: "Track 7", title: "The Right Environment", desc: "How can we help people understand and improve the conditions of indoor spaces while balancing comfort, productivity, energy consumption and the different needs of different users?" },
-    { id: "Track 8", title: "The Food Mismatch", desc: "How can we help food providers better match preparation with actual demand while reducing waste and ensuring that people still have sufficient food available?" },
-    { id: "Track 9", title: "Someone Should Know", desc: "How can we ensure that important situations are noticed and communicated to the right person at the right time, even when a facility is unattended?" },
-    { id: "Track 10", title: "The Smarter Collection", desc: "How can we make waste collection more responsive to actual conditions, while reducing unnecessary trips, operational effort and environmental impact?" }
-  ]
-};
-
 export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState<{regNo: string, username: string} | null>(null);
@@ -47,6 +21,7 @@ export default function Dashboard() {
   const [joinCode, setJoinCode] = useState("");
   const [newTeamName, setNewTeamName] = useState("");
   const [selectedDomain, setSelectedDomain] = useState("hardware");
+  const [selectedStatement, setSelectedStatement] = useState<any | null>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("placeit_user");
@@ -87,7 +62,7 @@ export default function Dashboard() {
   if (!user) return <div className="min-h-screen flex items-center justify-center font-marker text-3xl text-ink">Checking clipboard...</div>;
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Header */}
@@ -201,7 +176,11 @@ export default function Dashboard() {
                     {(mockStatements[selectedDomain] || []).length > 0 ? (
                       /* @ts-ignore */
                       mockStatements[selectedDomain].map((stmt) => (
-                        <div key={stmt.id} className="polaroid relative hover:scale-[1.01] transition-transform">
+                        <div 
+                          key={stmt.id} 
+                          onClick={() => setSelectedStatement(stmt)}
+                          className="polaroid relative hover:scale-[1.01] transition-transform cursor-pointer"
+                        >
                           <div className="tape -top-2 left-10 rotate-1"></div>
                           
                           <div className="w-full h-12 bg-canvas border-b-2 border-ink/20 mb-4 flex items-center justify-between px-4">
@@ -212,7 +191,14 @@ export default function Dashboard() {
                           </div>
                           
                           <h4 className="font-marker text-2xl text-ink mb-2 leading-tight px-2">{stmt.title}</h4>
-                          <p className="font-sans text-sm text-ink leading-relaxed px-2 pb-2">{stmt.desc}</p>
+                          <p className="font-sans text-sm text-ink leading-relaxed px-2 pb-4 line-clamp-3">
+                            {stmt.problem}
+                          </p>
+                          <div className="px-2 pb-4">
+                            <span className="text-neon-cyan font-bold font-mono text-xs uppercase underline decoration-wavy hover:text-neon-pink">
+                              Click to read full details
+                            </span>
+                          </div>
                         </div>
                       ))
                     ) : (
@@ -227,6 +213,42 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* Statement Details Modal */}
+      {selectedStatement && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-sm">
+          <div className="bg-canvas max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8 relative wobbly-border shadow-[12px_12px_0px_rgba(26,26,26,1)]">
+            <button 
+              onClick={() => setSelectedStatement(null)}
+              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-neon-pink text-ink font-marker text-xl wobbly-border-alt hover:bg-neon-yellow transition-colors"
+            >
+              X
+            </button>
+            
+            <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-2"></div>
+            
+            <span className="font-mono text-sm font-bold text-ink/50 block mb-2">{selectedStatement.id}</span>
+            <h2 className="font-marker text-4xl text-ink mb-8 leading-tight">{selectedStatement.title}</h2>
+            
+            <div className="space-y-6 font-sans text-lg text-ink">
+              <div>
+                <h3 className="font-marker text-2xl bg-neon-yellow/30 inline-block px-2 mb-2 -rotate-1">Problem Statement:</h3>
+                <p className="leading-relaxed">{selectedStatement.problem}</p>
+              </div>
+              
+              <div className="border-l-4 border-neon-cyan pl-4 py-2 bg-white/50">
+                <h3 className="font-marker text-2xl bg-neon-cyan/30 inline-block px-2 mb-2 rotate-1">Challenge:</h3>
+                <p className="leading-relaxed font-bold italic">{selectedStatement.challenge}</p>
+              </div>
+              
+              <div>
+                <h3 className="font-marker text-2xl bg-neon-mint/30 inline-block px-2 mb-2 -rotate-1">Why it works for an ideathon:</h3>
+                <p className="leading-relaxed">{selectedStatement.why}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
