@@ -75,7 +75,11 @@ export default function Dashboard() {
             </p>
           </div>
           <button 
-            onClick={() => { localStorage.removeItem("placeit_user"); router.push("/register"); }}
+            onClick={() => { 
+              localStorage.removeItem("placeit_user"); 
+              localStorage.removeItem("placeit_team"); 
+              router.push("/register"); 
+            }}
             className="font-marker text-xl text-ink underline decoration-wavy hover:text-neon-pink transition-colors"
           >
             Leave Room
@@ -132,9 +136,20 @@ export default function Dashboard() {
                 <p className="font-mono text-xl font-bold text-ink">{team.code}</p>
               </div>
               <p className="font-sans text-sm font-bold text-ink mb-2">Members:</p>
-              <ul className="font-marker text-xl text-ink space-y-1">
+              <ul className="font-marker text-xl text-ink space-y-1 mb-6">
                 {team.members.map((m, i) => <li key={i}>- {m}</li>)}
               </ul>
+              <div className="text-center">
+                <button 
+                  onClick={() => {
+                    localStorage.removeItem("placeit_team");
+                    setTeam(null);
+                  }}
+                  className="font-sans text-sm text-ink-light underline hover:text-neon-pink transition-colors"
+                >
+                  Leave Team
+                </button>
+              </div>
             </div>
 
             {/* Bidding & Domains Flow */}
