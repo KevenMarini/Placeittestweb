@@ -217,7 +217,7 @@ export default function Dashboard() {
       {/* Statement Details Modal */}
       {selectedStatement && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/40 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-24 sm:p-6 sm:pt-24 bg-ink/40 backdrop-blur-sm"
           onClick={() => setSelectedStatement(null)}
         >
           <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
@@ -229,7 +229,7 @@ export default function Dashboard() {
               X
             </button>
 
-            <div className="bg-canvas w-full max-h-[85vh] flex flex-col relative wobbly-border shadow-[12px_12px_0px_rgba(26,26,26,1)] overflow-hidden">
+            <div className="bg-canvas w-full max-h-[calc(100vh-8rem)] flex flex-col relative wobbly-border shadow-[12px_12px_0px_rgba(26,26,26,1)] overflow-hidden">
               {/* Modal Header (Fixed) */}
               <div className="p-6 pb-4 flex flex-col border-b-2 border-ink/10 relative z-10 bg-canvas shrink-0">
                 <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-2"></div>
