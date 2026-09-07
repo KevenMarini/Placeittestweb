@@ -14,12 +14,17 @@ const domains = [
 ];
 
 const mockStatements = {
-  "iot-aiml": [
-    { id: "stmt_01", title: "Predictive Maintenance System", desc: "Build an AI model using IoT sensor data to predict equipment failure." },
-    { id: "stmt_02", title: "Smart City Traffic Optimizer", desc: "Use computer vision and ML to optimize traffic light timings." }
-  ],
-  "cyber": [
-    { id: "stmt_03", title: "Decentralized Identity Vault", desc: "Create a blockchain-based secure identity verification system." }
+  "hardware": [
+    { id: "Track 1", title: "Battery Zero", desc: "Design an embedded hardware architecture that harvests ambient energy and intelligently duty-cycles computational and sensing workloads so the node theoretically sustains indefinite operation without ever requiring a battery swap." },
+    { id: "Track 2", title: "The Silent Saboteur", desc: "Develop a robust, hardware-level verification scheme that enables an embedded system to cryptographically prove its own physical authenticity and silicon integrity before being granted network or system access." },
+    { id: "Track 3", title: "One Board, Infinite Selves", desc: "Conceptualize an adaptable, self-reconfiguring embedded hardware platform that dynamically alters its interconnects and routing to serve fundamentally different application roles." },
+    { id: "Track 4", title: "Ghost in the Machine", desc: "Implement lightweight, on-chip or on-board edge-sensing and anomaly-detection techniques that allow a microcontroller to monitor its own component health, predict impending hardware failure, and enact fail-safe fallbacks in real time." },
+    { id: "Track 5", title: "Whispering Wires", desc: "Reinvent physical-layer embedded communication to enable remote nodes to reliably broadcast telemetry data across substantial distances while operating on near-zero power margins." },
+    { id: "Track 6", title: "The Shape-Shifting Chip", desc: "Structure an accessible silicon design paradigm or modular hardware platform that empowers small engineering teams to achieve domain-specific acceleration without bearing prohibitive fabrication costs." },
+    { id: "Track 7", title: "Hardware That Forgets Nothing, Reveals Nothing", desc: "Design embedded hardware circuits and PCB layouts that enforce privacy and anti-tamper security directly at the physical layer, making systems inherently immune to side-channel eavesdropping and physical extraction." },
+    { id: "Track 8", title: "The Last-Mile Machine", desc: "Design an embedded system architecture for infrastructure that is radically serviceable, self-diagnosing, and engineered to guide non-technical community members through troubleshooting and field repairs." },
+    { id: "Track 9", title: "Silicon Empathy", desc: "How can an embedded device accurately deduce and respond to human physiological or affective states using minimal, privacy-preserving physical sensors, without relying on invasive optical tracking or cloud-based processing?" },
+    { id: "Track 10", title: "The Vanishing Interface", desc: "Reinvent common physical interfaces so that interaction requires zero conscious learning curve and naturally blends into everyday human motion." }
   ]
 };
 
@@ -29,7 +34,7 @@ export default function Dashboard() {
   const [team, setTeam] = useState<{name: string, code: string, members: string[], statementId?: string} | null>(null);
   const [joinCode, setJoinCode] = useState("");
   const [newTeamName, setNewTeamName] = useState("");
-  const [selectedDomain, setSelectedDomain] = useState("");
+  const [selectedDomain, setSelectedDomain] = useState("hardware");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("placeit_user");
@@ -65,14 +70,6 @@ export default function Dashboard() {
     };
     setTeam(newTeam);
     localStorage.setItem("placeit_team", JSON.stringify(newTeam));
-  };
-
-  const handleSelectStatement = (id: string) => {
-    if (!team) return;
-    const updatedTeam = { ...team, statementId: id };
-    setTeam(updatedTeam);
-    localStorage.setItem("placeit_team", JSON.stringify(updatedTeam));
-    alert("Blueprint pinned to your board!");
   };
 
   if (!user) return <div className="min-h-screen flex items-center justify-center font-marker text-3xl text-ink">Checking clipboard...</div>;
@@ -150,9 +147,18 @@ export default function Dashboard() {
               </ul>
             </div>
 
-            {/* Domains & Schematics */}
+            {/* Bidding & Domains */}
             <div>
-              <h2 className="font-marker text-4xl font-bold text-ink mb-8">Idea Board (Domains)</h2>
+              <div className="text-center mb-12">
+                <h2 className="font-marker text-5xl font-bold text-ink inline-block bg-neon-yellow px-6 py-2 wobbly-border shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-2">
+                  IT'S TIME FOR BIDDING!
+                </h2>
+                <p className="font-sans text-lg text-ink-light mt-4 bg-white/50 inline-block px-4 py-2 wobbly-border-alt">
+                  Review the problem statements below. Admins will assign the final blueprints.
+                </p>
+              </div>
+
+              <h3 className="font-marker text-3xl font-bold text-ink mb-6">View Problem Statements</h3>
               
               <div className="flex flex-wrap gap-4 mb-12">
                 {domains.map((d, i) => (
@@ -171,48 +177,35 @@ export default function Dashboard() {
                 ))}
               </div>
 
-              {/* Problem Statements */}
+              {/* Problem Statements List */}
               {selectedDomain && (
                 <div className="space-y-6">
                   <h3 className="font-marker text-3xl text-ink bg-white inline-block px-4 py-1 wobbly-border-alt -rotate-1 shadow-sm">
                     Blueprints for {domains.find(d=>d.id === selectedDomain)?.name}
                   </h3>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
                     {/* @ts-ignore */}
                     {(mockStatements[selectedDomain] || []).length > 0 ? (
                       /* @ts-ignore */
                       mockStatements[selectedDomain].map((stmt) => (
-                        <div key={stmt.id} className="polaroid relative hover:scale-[1.02] transition-transform cursor-pointer">
+                        <div key={stmt.id} className="polaroid relative hover:scale-[1.01] transition-transform">
                           <div className="tape -top-2 left-10 rotate-1"></div>
                           
-                          <div className="w-full h-32 bg-canvas border-2 border-ink/20 mb-4 flex items-center justify-center">
-                            <span className="font-marker text-ink/20 text-4xl">SKETCH</span>
+                          <div className="w-full h-12 bg-canvas border-b-2 border-ink/20 mb-4 flex items-center justify-between px-4">
+                            <span className="font-mono text-sm font-bold text-ink">{stmt.id}</span>
+                            <span className="font-marker text-sm text-neon-pink bg-neon-pink/10 px-2 py-0.5 border border-neon-pink/30 rounded-sm -rotate-2">
+                              Awaiting Admin Assignment
+                            </span>
                           </div>
                           
-                          <div className="font-mono text-xs text-ink-light mb-1">ID: {stmt.id}</div>
-                          <h4 className="font-marker text-2xl text-ink mb-2 leading-tight">{stmt.title}</h4>
-                          <p className="font-sans text-sm text-ink leading-relaxed">{stmt.desc}</p>
-                          
-                          <div className="mt-4 flex justify-end">
-                            {team.statementId === stmt.id ? (
-                              <div className="font-marker text-xl text-neon-pink rotate-[-5deg] border-2 border-neon-pink px-2 py-1 inline-block">
-                                PINNED!
-                              </div>
-                            ) : (
-                              <button 
-                                onClick={() => handleSelectStatement(stmt.id)}
-                                className="font-marker text-xl text-ink bg-neon-cyan px-4 py-1 wobbly-border hover:bg-neon-yellow transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)]"
-                              >
-                                Pin this idea
-                              </button>
-                            )}
-                          </div>
+                          <h4 className="font-marker text-2xl text-ink mb-2 leading-tight px-2">{stmt.title}</h4>
+                          <p className="font-sans text-sm text-ink leading-relaxed px-2 pb-2">{stmt.desc}</p>
                         </div>
                       ))
                     ) : (
-                      <div className="col-span-full p-8 font-marker text-2xl text-ink-light text-center">
-                        No ideas scribbled here yet.
+                      <div className="col-span-full p-8 font-marker text-2xl text-ink-light text-center border-4 border-dashed border-ink/20 rounded-xl">
+                        No blueprints scribbled here yet. Check back later!
                       </div>
                     )}
                   </div>
