@@ -244,5 +244,87 @@ export const mockStatements = {
       challenge: "How can we construct an autonomous, decentralized collective-defense protocol where independent machines dynamically share zero-day threat intelligence and execute synchronized, honey-token quarantine actions in real time without exposing proprietary internal network topologies to peers?",
       why: "Pushes boundaries across privacy-preserving federated threat sharing, decentralized honeypot swarms, cryptographic threat validation graphs, and verifiable autonomous remediation protocols."
     }
+  ],
+  "math": [
+    { 
+      id: "Track 1", 
+      title: "Solar Storm Roulette", 
+      problem: "When extreme coronal mass ejections and geomagnetic storms impact Earth, low Earth orbit (LEO) atmospheric density surges erratically, inducing non-conservative aerodynamic drag that destabilizes satellite orbital ephemerides within hours. Conventional linear drag estimators fail under sudden thermospheric expansion, resulting in tracking loss and catastrophic collision risks.",
+      easy: "When extreme coronal mass ejections and geomagnetic storms impact Earth, low Earth orbit (LEO) atmospheric density surges erratically, inducing non-conservative aerodynamic drag that destabilizes satellite orbital ephemerides within hours.",
+      challenge: "How can we formulate a coupled nonlinear ordinary differential equation (ODE) drag framework integrated with a physics-informed correction layer to accurately forecast orbital decay and optimize impulsive correction-burn windows under severe space-weather perturbations?",
+      why: "Teams can devise mathematical drag models combining non-equilibrium density equations with hybrid surrogate layers, evaluating fuel-optimal delta-v execution schedules without requiring raw flight hardware."
+    },
+    { 
+      id: "Track 2", 
+      title: "The Kessler Cascade Simulator", 
+      problem: "Hypervelocity fragmentations in congested orbital shells create positive feedback loops where debris collisions generate secondary projectiles, mirroring epidemiological outbreak propagation. Once a critical density threshold is breached, the cascading proliferation becomes mathematically irreversible, rendering targeted orbital bands permanently unusable.",
+      easy: "Hypervelocity fragmentations in congested orbital shells create positive feedback loops where debris collisions generate secondary projectiles, mirroring epidemiological outbreak propagation.",
+      challenge: "How might we adapt nonlinear population-dynamics systems (such as compartmental SIR/SEIR models) to capture multi-altitude fragment generation, identify orbital tipping points, and prove the analytical efficacy of targeted active debris removal (ADR) interventions?",
+      why: "Encourages cross-domain mathematical translation between epidemiology and celestial mechanics, allowing participants to derive stability criteria, reproduction numbers for debris, and optimal orbital remediation quotas."
+    },
+    { 
+      id: "Track 3", 
+      title: "Hypersonic Shockwave Sculptor", 
+      problem: "Vehicles traveling beyond Mach 5 generate intense bow shockwaves where severe aerothermodynamic heating coincides with sharp boundary-layer transitions. Traditional sharp geometric profiles experience localized thermal ablation that causes structural breakdown, while blunt bodies suffer prohibitive drag penalties that compromise aerodynamic range.",
+      easy: "Vehicles traveling beyond Mach 5 generate intense bow shockwaves where severe aerothermodynamic heating coincides with sharp boundary-layer transitions.",
+      challenge: "How can we solve an inverse nonlinear shape-optimization problem governed by compressible Euler and Navier-Stokes PDE constraints to sculpt a vehicle geometry that minimizes peak stagnation-point heat flux while strictly preserving lift-to-drag efficiency?",
+      why: "Invites algorithmic formulation around adjoint-based shape optimization, parameter-space exploration, and reduced-order fluid-thermal coupling methods without demanding high-compute CFD cluster infrastructure."
+    },
+    { 
+      id: "Track 4", 
+      title: "Leaderless Satellite Swarm", 
+      problem: "Megaconstellations and distributed satellite apertures depend heavily on centralized ephemeris broadcasts or master-satellite topologies for formation upkeep. In congested or contested domains, single-node communication dropouts, anti-satellite threats, or telemetry latency rapidly induce orbital dispersion and constellation disintegration.",
+      easy: "Megaconstellations and distributed satellite apertures depend heavily on centralized ephemeris broadcasts or master-satellite topologies for formation upkeep.",
+      challenge: "How might we design a fully decentralized nonlinear coupling control law—inspired by Kuramoto phase-synchronization models—that enables autonomous satellite swarms to restore lattice geometry and phase consensus even after abruptly losing up to 30% of constituent nodes?",
+      why: "Participants can analyze network graph topology, phase synchronization dynamics, and Lyapunov-stable decentralized consensus laws under non-uniform inter-satellite communication delays."
+    },
+    { 
+      id: "Track 5", 
+      title: "Chaos Cone", 
+      problem: "Derelict upper stages and tumbling satellites entering the upper atmosphere exhibit complex, non-axisymmetric rigid-body gyration. Microscopic uncertainties in initial attitude, angular rate, or aerodynamic torque decouple determinism, yielding enormous dispersion footprints where conventional single-point trajectory forecasts fail catastrophically.",
+      easy: "Derelict upper stages and tumbling satellites entering the upper atmosphere exhibit complex, non-axisymmetric rigid-body gyration.",
+      challenge: "How can we leverage nonlinear rigid-body dynamics and chaos-theory metrics (such as finite-time Lyapunov exponents and phase-space boundary propagation) to map bounded, probabilistic impact zones rather than relying on false-precision deterministic trajectories?",
+      why: "Enables students to apply Hamiltonian mechanics, chaotic attractor characterization, and probabilistic phase-space diffusion without needing classified atmospheric entry test data."
+    },
+    { 
+      id: "Track 6", 
+      title: "Dust-Devil Defiant", 
+      problem: "Operating rotorcraft in the Martian atmosphere is constrained by ultra-low fluid density (roughly 1% of Earth) coupled with violent, unpredictable convective dust-devil vortex encounters. Under sudden crosswind shear and blade stall conditions, linear PID and small-perturbation controllers saturate rapidly, inducing catastrophic loss of attitude authority.",
+      easy: "Operating rotorcraft in the Martian atmosphere is constrained by ultra-low fluid density (roughly 1% of Earth) coupled with violent, unpredictable convective dust-devil vortex encounters.",
+      challenge: "How might we construct a robust, Lyapunov-based nonlinear flight controller (such as adaptive backstepping or sliding-mode control) capable of maintaining rotorcraft attitude stability and trajectory bounds during severe convective vortex encounters in rarified atmospheres?",
+      why: "Focuses on non-equilibrium aerodynamics, nonlinear stability proofs, control boundary guarantees, and state-dependent disturbance compensation across extreme flight envelopes."
+    },
+    { 
+      id: "Track 7", 
+      title: "Gravity's Slingshot", 
+      problem: "Interplanetary mission trajectories based on classic two-body patched-conic approximations demand massive propellant budgets that severely restrict scientific payloads. Although low-energy pathways exist within the chaotic invariant manifolds of the Circular Restricted Three-Body Problem (CR3BP), their non-integrable phase space renders systematic route discovery exceptionally difficult.",
+      easy: "Interplanetary mission trajectories based on classic two-body patched-conic approximations demand massive propellant budgets that severely restrict scientific payloads.",
+      challenge: "How can we couple the nonlinear dynamical equations of the three-body problem with physics-informed machine learning or evolutionary boundary-value solvers to identify ultra-low-energy transit pathways and ballistic capture trajectories across complex planetary systems?",
+      why: "Prompts innovative synergies between dynamical systems theory (Poincaré maps, stable/unstable manifolds) and modern machine learning search strategies to solve complex orbital optimization problems."
+    },
+    { 
+      id: "Track 8", 
+      title: "The Screaming Engine", 
+      problem: "High-thrust rocket combustion chambers operate in extreme regimes where turbulent heat release locks in phase with chamber acoustic eigenmodes. This thermoacoustic feedback loop triggers high-amplitude nonlinear pressure fluctuations within milliseconds, stripping thermal barrier coatings and causing explosive structural wall burn-through.",
+      easy: "High-thrust rocket combustion chambers operate in extreme regimes where turbulent heat release locks in phase with chamber acoustic eigenmodes.",
+      challenge: "How might we formulate a coupled nonlinear thermoacoustic ODE/PDE model to capture limit-cycle bifurcation regimes, predict the exact operational envelope where combustion instability triggers, and optimize acoustic damping geometries (baffles, Helmholtz resonators) to shift stability margins?",
+      why: "Allows teams to explore Rayleigh criterion mechanics, bifurcation theory, and analytical acoustic damping models, bridging pure mathematics with real-world aerospace propulsion safety."
+    },
+    { 
+      id: "Track 9", 
+      title: "Solar Sail Anarchist", 
+      problem: "Collinear Lagrange points (L1 and L2) represent saddle-point equilibria whose unstable manifolds cause uncorrected spacecraft to drift rapidly into heliocentric escape. While photon radiation pressure offers propellantless propulsion, solar activity fluctuations and membrane flexure introduce severe nonlinear attitude-orbit cross-coupling.",
+      easy: "Collinear Lagrange points (L1 and L2) represent saddle-point equilibria whose unstable manifolds cause uncorrected spacecraft to drift rapidly into heliocentric escape.",
+      challenge: "How can we engineer a chaos-control station-keeping policy—exploiting the natural instability of saddle manifolds using OGY-style intermittent micro-actuations—that maintains bounded solar sail libration orbits at L2 while expending zero chemical propellant?",
+      why: "Encourages non-traditional control architectures that utilize chaos rather than suppressing it, focusing on manifold geometry, solar radiation pressure dynamics, and minimal control actuation."
+    },
+    { 
+      id: "Track 10", 
+      title: "Whispers from the Void", 
+      problem: "Deep-space sensor streams, interstellar telemetry, and astrophysical time-series records are dominated by stochastic thermal background noise and instrument jitter. Transient scientific anomalies—such as unmodeled planetary resonances, gravitational wave micro-signatures, or coherent narrowband transients—remain buried because linear spectral filtering cannot distinguish deterministic chaos from white noise.",
+      easy: "Deep-space sensor streams, interstellar telemetry, and astrophysical time-series records are dominated by stochastic thermal background noise and instrument jitter.",
+      challenge: "How might we construct a nonlinear dynamical systems classifier using phase-space delay-coordinate embedding, correlation dimensions, and recurrence quantification analysis to autonomously isolate low-dimensional structured chaos from high-dimensional stochastic noise in deep-space telemetry?",
+      why: "Participants can cross-pollinate methods from nonlinear time-series analysis (Takens' theorem, entropy metrics) and statistical signal processing to develop innovative anomaly detection pipelines."
+    }
   ]
 };
