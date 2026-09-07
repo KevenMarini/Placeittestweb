@@ -53,22 +53,18 @@ export default function Register() {
           <div className="tape -top-3 left-10 rotate-2"></div>
           
           <div className="mb-6 border-b-2 border-ink/20 pb-4">
-            <h1 className="font-marker text-4xl font-bold text-ink mb-1">Registration Guide</h1>
+            <h1 className="font-marker text-4xl font-bold text-ink mb-1">Login Guide</h1>
             <p className="font-mono text-xs text-ink-light">Read before you flip!</p>
           </div>
 
           <div className="flex-grow space-y-6 font-sans text-lg text-ink">
             <div>
               <h3 className="font-marker text-2xl text-neon-pink">1. VIT Reg No</h3>
-              <p className="text-sm leading-relaxed">Enter your valid registration number (e.g., 23BCE1001). This will be verified during check-in.</p>
+              <p className="text-sm leading-relaxed">Enter the registration number you used to sign up (e.g., 23BCE1001).</p>
             </div>
             <div>
-              <h3 className="font-marker text-2xl text-neon-cyan">2. Alias / Name</h3>
-              <p className="text-sm leading-relaxed">Choose your real name or a cool hacker alias to be displayed on the leaderboards.</p>
-            </div>
-            <div>
-              <h3 className="font-marker text-2xl text-neon-mint">3. Secret Passcode</h3>
-              <p className="text-sm leading-relaxed">Set a simple PIN or password to secure your team identity during the event.</p>
+              <h3 className="font-marker text-2xl text-neon-mint">2. Secret Passcode</h3>
+              <p className="text-sm leading-relaxed">Enter the secret PIN or password you created for your team identity.</p>
             </div>
           </div>
 
@@ -76,7 +72,7 @@ export default function Register() {
             onClick={() => setIsFlipped(true)}
             className="mt-6 w-full font-marker text-2xl text-ink bg-neon-cyan py-3 hover:bg-neon-pink hover:text-white transition-all duration-300 wobbly-border shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:shadow-[4px_4px_0px_rgba(26,26,26,1)]"
           >
-            Turn Page &rarr;
+            Go to Login &rarr;
           </button>
         </div>
 
@@ -94,11 +90,11 @@ export default function Register() {
           
           <div className="mb-6 border-b-2 border-ink/20 pb-4 flex justify-between items-start">
             <div>
-              <h1 className="font-marker text-4xl font-bold text-ink mb-1">
-                {isLogin ? "RSVP / Check-in" : "New RSVP"}
+              <h1 className="font-marker text-3xl font-bold text-ink mb-1">
+                {isLogin ? "Login / Check-in" : "New Registration"}
               </h1>
               <p className="font-mono text-xs text-ink-light">
-                {isLogin ? "Admit One to The Lab" : "Fill out your tag"}
+                {isLogin ? "Access your dashboard" : "Create your account"}
               </p>
             </div>
             <button 
@@ -152,7 +148,7 @@ export default function Register() {
               type="submit"
               className="w-full font-marker text-2xl text-ink bg-neon-yellow py-3 hover:bg-neon-pink hover:text-white transition-all duration-300 wobbly-border shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:shadow-[4px_4px_0px_rgba(26,26,26,1)]"
             >
-              {isLogin ? "Punch Ticket" : "Get Ticket"}
+              {isLogin ? "Login" : "Register"}
             </button>
           </form>
 
