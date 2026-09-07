@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, CheckCircle2, Target } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Guidelines() {
   const criteria = [
@@ -11,12 +12,30 @@ export default function Guidelines() {
     { name: "Presentation", points: 10 },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  };
+
   return (
-    <section className="py-24 relative border-b border-cyan/20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <section className="py-24 relative border-b border-cyan/20 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
         
         {/* Left Col: Rules */}
-        <div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <div className="mb-8 flex items-end gap-4 border-b border-cyan/30 pb-4">
             <h2 className="font-heading text-3xl font-bold text-off-white">
               SYSTEM_PROTOCOLS
@@ -27,7 +46,7 @@ export default function Guidelines() {
           </div>
 
           <div className="space-y-6">
-            <div className="border border-cyan/20 bg-navy-dark/50 p-6 cad-border">
+            <motion.div variants={itemVariants} className="border border-cyan/20 bg-navy-dark/50 p-6 cad-border box-glow transition-all duration-300">
               <div className="flex items-center gap-3 mb-4">
                 <Target className="text-cyan" size={20} />
                 <h3 className="font-mono text-sm font-bold text-off-white">TEAM_FORMATION</h3>
@@ -36,9 +55,9 @@ export default function Guidelines() {
                 <li><strong className="text-off-white">Team Size:</strong> Teams must consist of 2 to 4 members. Solo participation is not permitted.</li>
                 <li><strong className="text-off-white">Eligibility:</strong> Open to all undergraduate and postgraduate students across disciplines.</li>
               </ul>
-            </div>
+            </motion.div>
 
-            <div className="border border-amber/30 bg-amber/5 p-6 cad-border">
+            <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }} className="border border-amber/30 bg-amber/5 p-6 cad-border hover:shadow-[0_0_15px_rgba(255,183,3,0.3)] transition-all duration-300">
               <div className="flex items-center gap-3 mb-4">
                 <AlertTriangle className="text-amber" size={20} />
                 <h3 className="font-mono text-sm font-bold text-amber">CODE_OF_CONDUCT</h3>
@@ -48,9 +67,9 @@ export default function Guidelines() {
                 <li><strong className="text-off-white">Deadlines:</strong> Submissions must be uploaded to the official portal before Day 2 morning deadline.</li>
                 <li><strong className="text-off-white">Professionalism:</strong> Participants must maintain professional decorum.</li>
               </ul>
-            </div>
+            </motion.div>
             
-            <div className="border border-cyan/20 bg-navy-dark/50 p-6 cad-border">
+            <motion.div variants={itemVariants} className="border border-cyan/20 bg-navy-dark/50 p-6 cad-border box-glow transition-all duration-300">
               <div className="flex items-center gap-3 mb-4">
                 <CheckCircle2 className="text-cyan" size={20} />
                 <h3 className="font-mono text-sm font-bold text-off-white">PITCHING_RULES</h3>
@@ -59,12 +78,17 @@ export default function Guidelines() {
                 <li><strong className="text-off-white">Time Limits:</strong> Exactly 7 minutes to pitch, followed by a 2-minute Q&A.</li>
                 <li><strong className="text-off-white">Presenters:</strong> At least two members must speak during the presentation.</li>
               </ul>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Col: Rubric */}
-        <div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <div className="mb-8 flex items-end gap-4 border-b border-cyan/30 pb-4">
             <h2 className="font-heading text-3xl font-bold text-off-white">
               EVAL_CRITERIA
@@ -74,7 +98,7 @@ export default function Guidelines() {
             </span>
           </div>
 
-          <div className="border border-cyan/30 bg-navy-dark overflow-hidden">
+          <div className="border border-cyan/30 bg-navy-dark overflow-hidden cad-border hover:border-cyan/50 transition-colors duration-500">
             <div className="bg-cyan/10 px-4 py-3 border-b border-cyan/30 flex justify-between">
               <span className="font-mono text-xs text-cyan">PARAMETER</span>
               <span className="font-mono text-xs text-cyan">WEIGHT</span>
@@ -82,23 +106,34 @@ export default function Guidelines() {
             
             <div className="divide-y divide-cyan/10">
               {criteria.map((item, index) => (
-                <div key={index} className="flex justify-between items-center px-4 py-4 hover:bg-cyan/5 transition-colors">
-                  <span className="font-heading font-medium text-off-white">
+                <motion.div 
+                  variants={itemVariants}
+                  whileHover={{ x: 10, backgroundColor: "rgba(0, 240, 255, 0.1)" }}
+                  key={index} 
+                  className="flex justify-between items-center px-4 py-4 cursor-pointer transition-colors"
+                >
+                  <span className="font-heading font-medium text-off-white flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-cyan rounded-full hidden sm:block opacity-50"></span>
                     {item.name}
                   </span>
                   <span className="font-mono text-amber">
                     {item.points} PTS
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
             
-            <div className="bg-amber/10 px-4 py-3 border-t border-amber/30 flex justify-between items-center">
-              <span className="font-mono text-xs font-bold text-amber">TOTAL_POSSIBLE</span>
-              <span className="font-mono text-lg font-bold text-amber text-glow-amber">50 PTS</span>
-            </div>
+            <motion.div variants={itemVariants} className="bg-amber/10 px-4 py-3 border-t border-amber/30 flex justify-between items-center relative overflow-hidden">
+              <motion.div 
+                animate={{ x: ["-100%", "100%"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-amber/10 to-transparent skew-x-12"
+              />
+              <span className="font-mono text-xs font-bold text-amber relative z-10">TOTAL_POSSIBLE</span>
+              <span className="font-mono text-lg font-bold text-amber text-glow-amber relative z-10">50 PTS</span>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

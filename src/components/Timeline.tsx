@@ -119,7 +119,10 @@ export default function Timeline() {
                 {/* Connecting trace */}
                 <div className="absolute left-[33px] top-2.5 w-6 h-px bg-cyan/30"></div>
 
-                <div className={`p-4 border cad-chamfer transition-colors ${item.isBreak ? 'border-amber/20 bg-amber/5' : 'border-cyan/20 bg-navy-dark/50 hover:border-cyan/50'}`}>
+                <motion.div 
+                  whileHover={{ scale: 1.02, x: 5 }}
+                  className={`p-4 border cad-chamfer transition-colors ${item.isBreak ? 'border-amber/20 bg-amber/5' : 'border-cyan/20 bg-navy-dark/50 hover:border-cyan/50'}`}
+                >
                   <div className="flex flex-wrap justify-between items-start mb-2 gap-2">
                     <div className="font-mono text-[10px] text-cyan uppercase tracking-wider bg-cyan/10 px-2 py-0.5 border border-cyan/20">
                       DAY 0{item.day} | {item.phase}
@@ -134,7 +137,7 @@ export default function Timeline() {
                   <p className="font-sans text-sm text-off-white/70">
                     {item.desc}
                   </p>
-                </div>
+                </motion.div>
               </motion.div>
             ))}
           </div>
