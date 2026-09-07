@@ -25,6 +25,18 @@ const mockStatements = {
     { id: "Track 8", title: "The Last-Mile Machine", desc: "Design an embedded system architecture for infrastructure that is radically serviceable, self-diagnosing, and engineered to guide non-technical community members through troubleshooting and field repairs." },
     { id: "Track 9", title: "Silicon Empathy", desc: "How can an embedded device accurately deduce and respond to human physiological or affective states using minimal, privacy-preserving physical sensors, without relying on invasive optical tracking or cloud-based processing?" },
     { id: "Track 10", title: "The Vanishing Interface", desc: "Reinvent common physical interfaces so that interaction requires zero conscious learning curve and naturally blends into everyday human motion." }
+  ],
+  "iot-aiml": [
+    { id: "Track 1", title: "The Wasted Resource", desc: "How can we help institutions understand when, where and why resources are being unnecessarily consumed, and enable them to reduce this waste without negatively affecting the people using these facilities?" },
+    { id: "Track 2", title: "Before the Breakdown", desc: "How can we help people recognize that a machine may be developing a problem before it becomes a costly failure or causes disruption?" },
+    { id: "Track 3", title: "Every Drop Matters", desc: "How can we help farmers make better water-management decisions while reducing unnecessary water usage and ensuring that crops receive what they need?" },
+    { id: "Track 4", title: "The Adaptive Campus", desc: "How can we make campus facilities respond intelligently to how they are actually being used, while improving efficiency and maintaining a good experience for students and staff?" },
+    { id: "Track 5", title: "The Crowded Campus", desc: "How can we help campuses anticipate and manage crowding before it becomes a major inconvenience or safety concern?" },
+    { id: "Track 6", title: "Where Did I Leave It?", desc: "How can we make it significantly easier for people to find, identify or recover misplaced belongings in large shared environments?" },
+    { id: "Track 7", title: "The Right Environment", desc: "How can we help people understand and improve the conditions of indoor spaces while balancing comfort, productivity, energy consumption and the different needs of different users?" },
+    { id: "Track 8", title: "The Food Mismatch", desc: "How can we help food providers better match preparation with actual demand while reducing waste and ensuring that people still have sufficient food available?" },
+    { id: "Track 9", title: "Someone Should Know", desc: "How can we ensure that important situations are noticed and communicated to the right person at the right time, even when a facility is unattended?" },
+    { id: "Track 10", title: "The Smarter Collection", desc: "How can we make waste collection more responsive to actual conditions, while reducing unnecessary trips, operational effort and environmental impact?" }
   ]
 };
 
