@@ -1,6 +1,5 @@
 "use client";
 
-import { AlertTriangle, CheckCircle2, Target } from "lucide-react";
 import { motion, Variants } from "framer-motion";
 
 export default function Guidelines() {
@@ -16,122 +15,109 @@ export default function Guidelines() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.2 }
+      transition: { staggerChildren: 0.1 }
     }
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0 }
   };
 
   return (
-    <section className="py-24 relative border-b border-cyan/20 overflow-hidden">
+    <section className="py-24 relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
         
-        {/* Left Col: Rules */}
+        {/* Left Col: Rules (Notebook style) */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="relative bg-white p-8 md:p-12 shadow-md rotate-1"
         >
-          <div className="mb-8 flex items-end gap-4 border-b border-cyan/30 pb-4">
-            <h2 className="font-heading text-3xl font-bold text-off-white">
-              SYSTEM_PROTOCOLS
-            </h2>
-            <span className="font-mono text-xs text-cyan mb-1">
-              // GUIDELINES
-            </span>
+          {/* Notebook holes */}
+          <div className="absolute left-4 top-0 bottom-0 w-8 border-r-2 border-neon-pink flex flex-col justify-evenly">
+            {[1,2,3,4,5,6].map(i => <div key={i} className="w-4 h-4 bg-canvas rounded-full border border-ink/20 -ml-2" />)}
           </div>
+          
+          <div className="pl-10">
+            <h2 className="font-marker text-4xl font-bold text-ink mb-6 inline-block relative">
+              Rules of Engagement
+              <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 100 10" preserveAspectRatio="none">
+                <path d="M0 5 Q 50 10 100 0" stroke="var(--color-neon-yellow)" strokeWidth="4" fill="none" />
+              </svg>
+            </h2>
 
-          <div className="space-y-6">
-            <motion.div variants={itemVariants} className="border border-cyan/20 bg-navy-dark/50 p-6 cad-border box-glow transition-all duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <Target className="text-cyan" size={20} />
-                <h3 className="font-mono text-sm font-bold text-off-white">TEAM_FORMATION</h3>
-              </div>
-              <ul className="font-sans text-sm text-off-white/70 space-y-2 list-disc pl-5 marker:text-cyan">
-                <li><strong className="text-off-white">Team Size:</strong> Teams must consist of 2 to 4 members. Solo participation is not permitted.</li>
-                <li><strong className="text-off-white">Eligibility:</strong> Open to all undergraduate and postgraduate students across disciplines.</li>
-              </ul>
-            </motion.div>
+            <div className="space-y-6 font-sans text-ink">
+              <motion.div variants={itemVariants}>
+                <h3 className="font-marker text-2xl text-neon-pink">Team Formation</h3>
+                <ul className="list-disc pl-5 marker:text-ink">
+                  <li><strong>Team Size:</strong> 2 to 4 members. Solo participation is a no-go.</li>
+                  <li><strong>Eligibility:</strong> Open to all disciplines. Cross-specialization is cool!</li>
+                </ul>
+              </motion.div>
 
-            <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }} className="border border-amber/30 bg-amber/5 p-6 cad-border hover:shadow-[0_0_15px_rgba(255,183,3,0.3)] transition-all duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <AlertTriangle className="text-amber" size={20} />
-                <h3 className="font-mono text-sm font-bold text-amber">CODE_OF_CONDUCT</h3>
-              </div>
-              <ul className="font-sans text-sm text-off-white/70 space-y-2 list-disc pl-5 marker:text-amber">
-                <li><strong className="text-off-white">Original Work:</strong> All ideas and design frameworks must be conceived during the event.</li>
-                <li><strong className="text-off-white">Deadlines:</strong> Submissions must be uploaded to the official portal before Day 2 morning deadline.</li>
-                <li><strong className="text-off-white">Professionalism:</strong> Participants must maintain professional decorum.</li>
-              </ul>
-            </motion.div>
-            
-            <motion.div variants={itemVariants} className="border border-cyan/20 bg-navy-dark/50 p-6 cad-border box-glow transition-all duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <CheckCircle2 className="text-cyan" size={20} />
-                <h3 className="font-mono text-sm font-bold text-off-white">PITCHING_RULES</h3>
-              </div>
-              <ul className="font-sans text-sm text-off-white/70 space-y-2 list-disc pl-5 marker:text-cyan">
-                <li><strong className="text-off-white">Time Limits:</strong> Exactly 7 minutes to pitch, followed by a 2-minute Q&A.</li>
-                <li><strong className="text-off-white">Presenters:</strong> At least two members must speak during the presentation.</li>
-              </ul>
-            </motion.div>
+              <motion.div variants={itemVariants}>
+                <h3 className="font-marker text-2xl text-neon-cyan">Code of Conduct</h3>
+                <ul className="list-disc pl-5 marker:text-ink">
+                  <li><strong>Original Work:</strong> Build it here. No pre-existing projects!</li>
+                  <li><strong>Deadlines:</strong> Submit before Day 2 morning. No exceptions.</li>
+                </ul>
+              </motion.div>
+              
+              <motion.div variants={itemVariants}>
+                <h3 className="font-marker text-2xl text-neon-mint">Pitching</h3>
+                <ul className="list-disc pl-5 marker:text-ink">
+                  <li><strong>Time:</strong> 7 min pitch + 2 min Q&A.</li>
+                  <li><strong>Speakers:</strong> At least two members must present.</li>
+                </ul>
+              </motion.div>
+            </div>
           </div>
         </motion.div>
 
-        {/* Right Col: Rubric */}
+        {/* Right Col: Rubric (Clipboard style) */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="relative bg-kraft-dark p-6 md:p-8 rounded-md shadow-lg -rotate-2"
         >
-          <div className="mb-8 flex items-end gap-4 border-b border-cyan/30 pb-4">
-            <h2 className="font-heading text-3xl font-bold text-off-white">
-              EVAL_CRITERIA
-            </h2>
-            <span className="font-mono text-xs text-amber mb-1">
-              // RUBRIC_MAX_50
-            </span>
+          {/* Clipboard clip */}
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-ink rounded-md shadow-md border-b-4 border-ink-light flex justify-center items-center">
+            <div className="w-16 h-2 bg-canvas/20 rounded-full" />
           </div>
 
-          <div className="border border-cyan/30 bg-navy-dark overflow-hidden cad-border hover:border-cyan/50 transition-colors duration-500">
-            <div className="bg-cyan/10 px-4 py-3 border-b border-cyan/30 flex justify-between">
-              <span className="font-mono text-xs text-cyan">PARAMETER</span>
-              <span className="font-mono text-xs text-cyan">WEIGHT</span>
-            </div>
-            
-            <div className="divide-y divide-cyan/10">
+          <div className="bg-canvas p-6 mt-4 wobbly-border">
+            <h2 className="font-marker text-3xl font-bold text-ink mb-6 text-center">
+              Evaluation Rubric
+            </h2>
+
+            <div className="divide-y-2 divide-ink/20 font-marker text-xl">
+              <div className="flex justify-between items-center py-2 text-ink-light text-lg">
+                <span>Criteria</span>
+                <span>Points</span>
+              </div>
+              
               {criteria.map((item, index) => (
                 <motion.div 
                   variants={itemVariants}
-                  whileHover={{ x: 10, backgroundColor: "rgba(0, 240, 255, 0.1)" }}
+                  whileHover={{ x: 10, color: "var(--color-neon-pink)" }}
                   key={index} 
-                  className="flex justify-between items-center px-4 py-4 cursor-pointer transition-colors"
+                  className="flex justify-between items-center py-3 cursor-pointer transition-colors"
                 >
-                  <span className="font-heading font-medium text-off-white flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-cyan rounded-full hidden sm:block opacity-50"></span>
-                    {item.name}
-                  </span>
-                  <span className="font-mono text-amber">
-                    {item.points} PTS
-                  </span>
+                  <span className="font-sans font-bold text-ink">{item.name}</span>
+                  <span className="text-ink">{item.points}</span>
                 </motion.div>
               ))}
+              
+              <div className="flex justify-between items-center py-4 mt-2 border-t-4 border-ink">
+                <span className="font-sans font-bold text-ink">TOTAL</span>
+                <span className="font-marker text-3xl text-neon-pink">50</span>
+              </div>
             </div>
-            
-            <motion.div variants={itemVariants} className="bg-amber/10 px-4 py-3 border-t border-amber/30 flex justify-between items-center relative overflow-hidden">
-              <motion.div 
-                animate={{ x: ["-100%", "100%"] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-amber/10 to-transparent skew-x-12"
-              />
-              <span className="font-mono text-xs font-bold text-amber relative z-10">TOTAL_POSSIBLE</span>
-              <span className="font-mono text-lg font-bold text-amber text-glow-amber relative z-10">50 PTS</span>
-            </motion.div>
           </div>
         </motion.div>
 

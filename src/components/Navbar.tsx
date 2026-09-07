@@ -1,70 +1,57 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setCoords({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  const formatCoord = (val: number) => val.toString().padStart(4, "0");
-
   const navLinks = [
-    { name: "SYSTEM_ROOT", path: "/" },
-    { name: "DASHBOARD", path: "/dashboard" },
-    { name: "COMM_LINK", path: "/contact" },
+    { name: "Home", path: "/" },
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-cyan/30 bg-navy-dark/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo / Title */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="font-heading font-bold text-xl text-cyan tracking-wider flex items-center gap-2">
-              <span className="text-amber">{"//"}</span> PLACE_IT
-            </Link>
-          </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 pt-4 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto flex justify-between items-center bg-white/80 backdrop-blur-sm p-3 wobbly-border shadow-[4px_4px_0px_rgba(26,26,26,0.2)]">
+        
+        {/* Tape decoration */}
+        <div className="tape -top-2 left-10 rotate-3"></div>
 
-          {/* Center Links */}
-          <div className="hidden md:flex space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                href={link.path}
-                className={`font-mono text-xs tracking-widest px-3 py-2 transition-colors duration-200 ${
-                  pathname === link.path
-                    ? "text-cyan border-b-2 border-cyan text-glow"
-                    : "text-off-white/70 hover:text-cyan"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
+        {/* Logo */}
+        <div className="flex-shrink-0 flex items-center">
+          <Link href="/" className="font-marker text-3xl font-bold text-ink hover:text-neon-pink transition-colors">
+            Place<span className="text-neon-mint">IT</span>
+          </Link>
+        </div>
 
-          {/* Right Side - Coordinates & Auth */}
-          <div className="flex items-center gap-6">
-            <div className="hidden lg:flex font-mono text-xs text-cyan/70 border border-cyan/20 px-3 py-1 rounded bg-navy-dark">
-              X: {formatCoord(coords.x)} | Y: {formatCoord(coords.y)}
-            </div>
-            
+        {/* Links */}
+        <div className="hidden md:flex space-x-6">
+          {navLinks.map((link) => (
             <Link
-              href="/register"
-              className="font-mono text-xs font-bold text-navy bg-cyan px-4 py-2 hover:bg-amber transition-colors duration-300 cad-chamfer shadow-[0_0_15px_rgba(0,240,255,0.3)] hover:shadow-[0_0_15px_rgba(255,183,3,0.5)]"
+              key={link.path}
+              href={link.path}
+              className={`font-sans font-bold text-lg px-2 py-1 relative group`}
             >
-              [ LOGIN_INIT ]
+              <span className={`relative z-10 ${pathname === link.path ? "text-ink" : "text-ink-light group-hover:text-ink"}`}>
+                {link.name}
+              </span>
+              {pathname === link.path && (
+                <div className="absolute bottom-1 left-0 w-full h-3 bg-neon-yellow -z-10 -rotate-2" />
+              )}
             </Link>
-          </div>
+          ))}
+        </div>
+
+        {/* Right Side */}
+        <div>
+          <Link
+            href="/register"
+            className="font-marker text-xl font-bold text-ink bg-neon-cyan px-6 py-2 wobbly-border-alt hover:bg-neon-pink transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] -translate-y-1 hover:-translate-y-2 inline-block"
+          >
+            RSVP
+          </Link>
         </div>
       </div>
     </nav>

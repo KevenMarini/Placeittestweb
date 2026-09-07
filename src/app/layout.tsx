@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
-import { Chakra_Petch, Space_Mono, Inter } from "next/font/google";
+import { Caveat, Plus_Jakarta_Sans, Courier_Prime } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-const chakraPetch = Chakra_Petch({
-  variable: "--font-heading",
-  weight: ["400", "500", "600", "700"],
+const caveat = Caveat({
+  variable: "--font-marker",
   subsets: ["latin"],
 });
 
-const spaceMono = Space_Mono({
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-sans",
+  subsets: ["latin"],
+});
+
+const courierPrime = Courier_Prime({
   variable: "--font-mono",
   weight: ["400", "700"],
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -34,9 +33,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${chakraPetch.variable} ${spaceMono.variable} ${inter.variable} h-full antialiased bg-navy text-off-white`}
+      className={`${caveat.variable} ${plusJakarta.variable} ${courierPrime.variable} h-full antialiased text-ink bg-canvas`}
     >
-      <body className="min-h-full flex flex-col font-sans pt-16 relative">
+      <body className="min-h-full flex flex-col font-sans pt-16 relative bg-canvas">
         <Navbar />
         <main className="flex-grow relative z-10">{children}</main>
         <Footer />

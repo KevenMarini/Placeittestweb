@@ -1,130 +1,121 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { Cpu, Terminal } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion, useDragControls } from "framer-motion";
 
 export default function Hero() {
-  const [timeLeft, setTimeLeft] = useState({
-    d: 0, h: 0, m: 0, s: 0,
-  });
+  const constraintsRef = useRef(null);
+  
+  // Custom sticky notes state
+  const [stickies, setStickies] = useState([
+    { id: 1, text: "Build an AI that codes!", color: "bg-neon-yellow", x: 100, y: 50, rotate: -5 },
+    { id: 2, text: "Smart City IoT platform", color: "bg-neon-mint", x: 300, y: -20, rotate: 3 },
+    { id: 3, text: "Blockchain Medical Vault", color: "bg-neon-pink", x: 50, y: 150, rotate: -2 },
+  ]);
 
-  useEffect(() => {
-    // Target date: Sept 12, 2026
-    const targetDate = new Date("2026-09-12T09:00:00").getTime();
+  const [newStickyText, setNewStickyText] = useState("");
+  const [newStickyColor, setNewStickyColor] = useState("bg-neon-yellow");
 
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance < 0) {
-        clearInterval(interval);
-        return;
+  const addSticky = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newStickyText.trim()) return;
+    setStickies([
+      ...stickies,
+      {
+        id: Date.now(),
+        text: newStickyText,
+        color: newStickyColor,
+        x: Math.random() * 200,
+        y: Math.random() * 200,
+        rotate: Math.random() * 20 - 10,
       }
+    ]);
+    setNewStickyText("");
+  };
 
-      setTimeLeft({
-        d: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        h: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        m: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        s: Math.floor((distance % (1000 * 60)) / 1000),
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const colors = ["bg-neon-yellow", "bg-neon-pink", "bg-neon-mint", "bg-neon-cyan"];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden border-b border-cyan/20">
-      {/* Background Decor */}
-      <div className="absolute inset-0 pointer-events-none opacity-20">
-        <div className="absolute top-1/4 left-10 w-64 h-px bg-cyan" />
-        <div className="absolute bottom-1/4 right-10 w-64 h-px bg-cyan" />
-        <div className="absolute top-20 right-20 w-px h-64 bg-cyan" />
-      </div>
+    <section className="relative min-h-screen pt-24 pb-12 overflow-hidden flex items-center justify-center">
+      
+      {/* Hand-drawn SVG Doodles Background */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 100 200 Q 300 50 500 300 T 900 100" fill="transparent" stroke="var(--color-ink)" strokeWidth="3" className="drawn-arrow" strokeLinecap="round" />
+        <path d="M 800 500 C 900 600, 1000 400, 1100 550" fill="transparent" stroke="var(--color-neon-pink)" strokeWidth="4" className="drawn-arrow" strokeLinecap="round" />
+        <circle cx="150" cy="500" r="40" fill="none" stroke="var(--color-neon-mint)" strokeWidth="4" strokeDasharray="10 5" />
+      </svg>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10" ref={constraintsRef}>
         
-        {/* Left Content */}
-        <div className="flex flex-col gap-6">
-          <div className="inline-flex items-center gap-2 border border-amber/30 bg-amber/5 px-3 py-1 w-fit cad-chamfer">
-            <Terminal size={14} className="text-amber" />
-            <span className="font-mono text-xs text-amber tracking-widest uppercase">
-              SYS_INIT // SEC_01
-            </span>
+        {/* Left: Content */}
+        <div className="flex flex-col gap-6 justify-center">
+          <div className="inline-block px-4 py-1 bg-ink text-canvas font-marker text-xl w-fit -rotate-2 wobbly-border shadow-[4px_4px_0px_rgba(255,107,107,1)]">
+            IEEE PCS PRESENTS
           </div>
-
-          <h1 className="font-heading text-5xl md:text-7xl font-bold text-off-white uppercase leading-tight">
-            Place<span className="text-cyan">IT</span>
+          
+          <h1 className="font-marker text-7xl md:text-9xl text-ink leading-none">
+            Place<span className="text-neon-mint">IT</span>
             <br />
-            <span className="text-3xl md:text-4xl text-off-white/70">Ideathon 2026</span>
+            <span className="text-5xl md:text-7xl text-ink-light">Ideathon '26</span>
           </h1>
-
-          <p className="font-sans text-lg text-off-white/70 max-w-xl border-l-2 border-cyan/50 pl-4 py-2">
-            The flagship ideathon by IEEE PCS. Develop and pitch innovative solutions to real-world problems. Enter the laboratory. Build the future.
+          
+          <p className="font-sans text-xl text-ink-light max-w-lg font-medium bg-white/50 p-4 wobbly-border-alt">
+            Grab a marker. Join a team. Build tangible prototypes from raw concepts in our ultimate whiteboard session.
           </p>
 
-          <div className="grid grid-cols-4 gap-4 max-w-sm border border-cyan/20 p-4 bg-navy-dark/50 relative cad-border">
-            {/* Countdown */}
-            {Object.entries(timeLeft).map(([unit, value]) => (
-              <div key={unit} className="flex flex-col items-center">
-                <span className="font-mono text-2xl text-cyan text-glow">
-                  {value.toString().padStart(2, "0")}
-                </span>
-                <span className="font-mono text-[10px] text-off-white/50 uppercase">{unit}</span>
+          {/* Add Sticky Note Form */}
+          <form onSubmit={addSticky} className="mt-8 bg-kraft-dark/20 p-6 wobbly-border relative max-w-md">
+            <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-1"></div>
+            <h3 className="font-marker text-2xl mb-4 text-ink">Drop an Idea!</h3>
+            <textarea 
+              value={newStickyText}
+              onChange={(e) => setNewStickyText(e.target.value)}
+              placeholder="What's on your mind?..."
+              className="w-full bg-white p-3 font-marker text-xl text-ink resize-none h-24 border-2 border-ink focus:outline-none focus:border-neon-pink shadow-[2px_2px_0px_rgba(26,26,26,1)]"
+            />
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex gap-2">
+                {colors.map(c => (
+                  <button 
+                    key={c} type="button" 
+                    onClick={() => setNewStickyColor(c)}
+                    className={`w-6 h-6 rounded-full border-2 border-ink ${c} ${newStickyColor === c ? 'ring-2 ring-offset-2 ring-ink' : ''}`}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
-
-          <div className="pt-4">
-            <Link
-              href="/register"
-              className="inline-flex items-center justify-center gap-2 font-mono text-sm font-bold text-navy bg-cyan px-8 py-4 hover:bg-amber transition-all duration-300 cad-chamfer shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_25px_rgba(255,183,3,0.6)] group"
-            >
-              <Cpu className="group-hover:animate-spin" size={18} />
-              [ INITIALIZE REGISTRATION ]
-            </Link>
-          </div>
+              <button type="submit" className="font-sans font-bold bg-ink text-canvas px-4 py-2 wobbly-border hover:bg-neon-yellow hover:text-ink transition-colors">
+                Stick it!
+              </button>
+            </div>
+          </form>
         </div>
 
-        {/* Right Content - Wireframe Visual */}
-        <div className="relative h-[400px] w-full flex items-center justify-center">
-          <div className="absolute inset-0 border border-cyan/20 cad-border opacity-50"></div>
+        {/* Right: Interactive Draggable Board */}
+        <div className="relative h-[600px] w-full border-4 border-kraft-dark bg-white shadow-xl rounded-sm">
+          {/* Corkboard texture overlay */}
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
           
-          {/* Rotating Wireframe SVG */}
-          <motion.div
-            animate={{ rotateZ: 360, rotateX: 20, rotateY: 30 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="relative w-64 h-64"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_10px_rgba(0,240,255,0.5)]">
-              {/* Outer Hexagon */}
-              <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" fill="none" stroke="var(--color-cyan)" strokeWidth="0.5" />
-              {/* Inner Hexagon */}
-              <polygon points="50,20 75,35 75,65 50,80 25,65 25,35" fill="none" stroke="var(--color-cyan)" strokeWidth="1" strokeDasharray="2 2" />
-              {/* Connecting Lines */}
-              <line x1="50" y1="5" x2="50" y2="20" stroke="var(--color-cyan)" strokeWidth="0.5" />
-              <line x1="95" y1="27.5" x2="75" y2="35" stroke="var(--color-cyan)" strokeWidth="0.5" />
-              <line x1="95" y1="72.5" x2="75" y2="65" stroke="var(--color-cyan)" strokeWidth="0.5" />
-              <line x1="50" y1="95" x2="50" y2="80" stroke="var(--color-cyan)" strokeWidth="0.5" />
-              <line x1="5" y1="72.5" x2="25" y2="65" stroke="var(--color-cyan)" strokeWidth="0.5" />
-              <line x1="5" y1="27.5" x2="25" y2="35" stroke="var(--color-cyan)" strokeWidth="0.5" />
-              {/* Center Core */}
-              <circle cx="50" cy="50" r="8" fill="none" stroke="var(--color-amber)" strokeWidth="1" className="text-glow-amber" />
-              <circle cx="50" cy="50" r="3" fill="var(--color-amber)" />
-            </svg>
-          </motion.div>
+          <div className="absolute top-2 left-2 font-mono text-sm text-ink/50 bg-neon-yellow px-2 border border-ink rotate-2">
+            [ DRAG THE STICKIES ]
+          </div>
 
-          {/* Callouts */}
-          <div className="absolute top-10 right-10 font-mono text-[10px] text-cyan/70 border-b border-cyan/30 pb-1">
-            CORE_TEMP: OPTIMAL
-          </div>
-          <div className="absolute bottom-10 left-10 font-mono text-[10px] text-amber border-l border-amber/30 pl-2">
-            PROTOTYPE: MK-I
-          </div>
+          {stickies.map((sticky) => (
+            <motion.div
+              key={sticky.id}
+              drag
+              dragConstraints={constraintsRef}
+              dragElastic={0.2}
+              whileDrag={{ scale: 1.1, rotate: 0, zIndex: 50 }}
+              initial={{ x: sticky.x, y: sticky.y, rotate: sticky.rotate }}
+              className={`absolute w-40 h-40 ${sticky.color} p-4 cursor-grab active:cursor-grabbing border border-ink/10 flex items-center justify-center text-center shadow-lg hover:shadow-xl transition-shadow`}
+            >
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-3 bg-white/40 shadow-sm border border-white/50 -translate-y-1 rotate-1 backdrop-blur-sm"></div>
+              <p className="font-marker text-2xl text-ink leading-tight select-none">
+                {sticky.text}
+              </p>
+            </motion.div>
+          ))}
         </div>
-
       </div>
     </section>
   );

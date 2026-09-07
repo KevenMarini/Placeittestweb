@@ -1,77 +1,82 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #0A192F;
-  --color-navy-dark: #061325;
-  --color-cyan: #00F0FF;
-  --color-amber: #FFB703;
-  --color-off-white: #E2E8F0;
+  --color-canvas: #F7F5F0;
+  --color-kraft: #D9C5A0;
+  --color-kraft-dark: #C4AE87;
+  --color-neon-yellow: #FFE66D;
+  --color-neon-pink: #FF6B6B;
+  --color-neon-mint: #4ECDC4;
+  --color-neon-cyan: #70D6FF;
+  --color-ink: #1A1A1A;
+  --color-ink-light: #4A4A4A;
   
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --font-heading: var(--font-heading);
+  --font-marker: var(--font-marker);
 }
 
 @layer base {
   body {
-    background-color: var(--color-navy);
-    background-image: 
-      linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-position: center center;
-    color: var(--color-off-white);
+    background-color: var(--color-canvas);
+    background-image: radial-gradient(var(--color-kraft) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: var(--color-ink);
   }
 }
 
 @layer utilities {
-  .cad-border {
-    position: relative;
-    border: 1px solid rgba(0, 240, 255, 0.3);
+  .wobbly-border {
+    border: 2px solid var(--color-ink);
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
   }
   
-  .cad-border::before,
-  .cad-border::after {
-    content: "";
+  .wobbly-border-alt {
+    border: 2px solid var(--color-ink);
+    border-radius: 15px 225px 15px 255px/255px 15px 225px 15px;
+  }
+
+  .sticky-note {
+    box-shadow: 2px 4px 6px rgba(0,0,0,0.1), inset 0 -10px 20px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .sticky-note:hover {
+    box-shadow: 4px 8px 12px rgba(0,0,0,0.15), inset 0 -10px 20px rgba(0,0,0,0.05);
+  }
+
+  .tape {
     position: absolute;
-    width: 8px;
-    height: 8px;
-    border: 1px solid var(--color-cyan);
-    pointer-events: none;
-  }
-  
-  .cad-border::before {
-    top: -4px;
-    left: -4px;
-    border-right: none;
-    border-bottom: none;
-  }
-  
-  .cad-border::after {
-    bottom: -4px;
-    right: -4px;
-    border-left: none;
-    border-top: none;
+    width: 60px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transform: rotate(-3deg);
+    z-index: 10;
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255,255,255,0.5);
   }
 
-  .cad-chamfer {
-    clip-path: polygon(
-      12px 0, 100% 0, 
-      100% calc(100% - 12px), calc(100% - 12px) 100%, 
-      0 100%, 0 12px
-    );
+  .polaroid {
+    background: white;
+    padding: 10px 10px 40px 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
   }
 
-  .text-glow {
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  .marker-text {
+    font-family: var(--font-marker);
   }
-  
-  .text-glow-amber {
-    text-shadow: 0 0 10px rgba(255, 183, 3, 0.5);
+
+  .drawn-arrow {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw 2s ease forwards;
   }
-  
-  .box-glow:hover {
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(0, 240, 255, 0.1);
-    border-color: var(--color-cyan);
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
   }
 }
