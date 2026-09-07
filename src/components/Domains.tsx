@@ -55,7 +55,7 @@ export default function Domains() {
         <div className="text-center mb-16 relative">
           <div className="tape -top-4 left-1/2 -translate-x-1/2 rotate-1"></div>
           <h2 className="font-marker text-5xl text-ink inline-block bg-white px-6 py-2 wobbly-border shadow-[4px_4px_0px_rgba(26,26,26,1)] rotate-2">
-            Hack Tracks
+            Idea Tracks
           </h2>
           <p className="font-sans text-xl text-ink-light mt-6 max-w-2xl mx-auto bg-kraft/30 p-4 wobbly-border-alt -rotate-1">
             Pick a domain, grab some sticky notes, and start brainstorming. Which problem will your team solve?

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const timelineData = [
   { phase: "Day 1", title: "Launch & Keynote", time: "09:00 AM", desc: "Event kickoff & problem statements." },
   { phase: "Day 1", title: "Masterclass", time: "10:00 AM", desc: "Ideation to MVP." },
-  { phase: "Day 1", title: "Hacking Kickoff", time: "11:30 AM", desc: "Teams form & build." },
+  { phase: "Day 1", title: "Ideation Kickoff", time: "11:30 AM", desc: "Teams form & build." },
   { phase: "Break", title: "Lunch", time: "12:30 PM", desc: "Refuel.", isBreak: true },
   { phase: "Day 1", title: "Deep Dive", time: "02:00 PM", desc: "Core development." },
   { phase: "Day 2", title: "Final Sprint", time: "09:00 AM", desc: "Bug squashing & polish." },

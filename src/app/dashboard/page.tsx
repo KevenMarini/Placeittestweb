@@ -70,7 +70,7 @@ export default function Dashboard() {
           <div>
             <h1 className="font-marker text-5xl font-bold text-ink">The Workspace</h1>
             <p className="font-mono text-sm text-ink bg-neon-yellow px-2 py-1 inline-block mt-2 -rotate-1">
-              Hacker: {user.username} | Badge: {user.regNo}
+              Ideator: {user.username} | Badge: {user.regNo}
             </p>
           </div>
           <button 
