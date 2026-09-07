@@ -11,20 +11,21 @@ export default function Register() {
     username: "",
     password: "",
   });
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.regNo || !formData.username || !formData.password) return;
+    if (!formData.regNo || !formData.password) return;
+    if (!isLogin && !formData.username) return;
     
     setIsSubmitted(true);
 
     setTimeout(() => {
       localStorage.setItem("placeit_user", JSON.stringify({
         regNo: formData.regNo,
-        username: formData.username,
+        username: isLogin ? "Ideator" : formData.username, // Mock user name on login
       }));
       router.push("/dashboard");
     }, 1500);
@@ -121,17 +122,19 @@ export default function Register() {
               />
             </div>
 
-            <div className="space-y-1">
-              <label className="font-marker text-xl text-ink">Alias / Name:</label>
-              <input
-                type="text"
-                required
-                value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="w-full bg-transparent border-b-2 border-ink text-ink font-sans p-2 focus:outline-none focus:border-neon-pink transition-colors text-lg"
-                placeholder="John Doe"
-              />
-            </div>
+            {!isLogin && (
+              <div className="space-y-1">
+                <label className="font-marker text-xl text-ink">Alias / Name:</label>
+                <input
+                  type="text"
+                  required={!isLogin}
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  className="w-full bg-transparent border-b-2 border-ink text-ink font-sans p-2 focus:outline-none focus:border-neon-pink transition-colors text-lg"
+                  placeholder="John Doe"
+                />
+              </div>
+            )}
 
             <div className="space-y-1">
               <label className="font-marker text-xl text-ink">Secret Passcode:</label>
@@ -159,7 +162,7 @@ export default function Register() {
               onClick={() => setIsLogin(!isLogin)}
               className="font-sans font-bold text-sm text-ink-light hover:text-neon-pink transition-colors underline decoration-wavy"
             >
-              {isLogin ? "Need a ticket? RSVP here." : "Already have a ticket? Check in."}
+              {isLogin ? "Don't have a ticket? Create a new account." : "Already have a ticket? Check in."}
             </button>
           </div>
 
