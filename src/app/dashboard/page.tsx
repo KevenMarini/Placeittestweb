@@ -43,7 +43,7 @@ export default function Dashboard() {
     const newTeam = {
       name: newTeamName,
       code: `TEAM_${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-      members: [user?.username || "Unknown"],
+      members: [`${user?.username || "Unknown"} (Captain)`],
     };
     setTeam(newTeam);
     localStorage.setItem("placeit_team", JSON.stringify(newTeam));
@@ -54,7 +54,7 @@ export default function Dashboard() {
     const newTeam = {
       name: "Joined Team",
       code: joinCode,
-      members: ["Leader", user?.username || "Unknown"],
+      members: ["Captain", user?.username || "Unknown"],
     };
     setTeam(newTeam);
     localStorage.setItem("placeit_team", JSON.stringify(newTeam));
@@ -87,7 +87,8 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="bg-white p-8 wobbly-border shadow-[8px_8px_0px_rgba(26,26,26,0.1)] relative">
               <div className="tape -top-3 left-1/2 -translate-x-1/2"></div>
-              <h2 className="font-marker text-3xl font-bold text-ink mb-6">Start a New Team</h2>
+              <h2 className="font-marker text-3xl font-bold text-ink mb-2">Make a Team</h2>
+              <p className="font-sans text-sm text-ink-light mb-6">(Become the Team Leader)</p>
               <input
                 type="text"
                 placeholder="Awesome Team Name"
@@ -102,13 +103,14 @@ export default function Dashboard() {
 
             <div className="bg-kraft p-8 wobbly-border shadow-[8px_8px_0px_rgba(26,26,26,0.1)] relative">
               <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-3"></div>
-              <h2 className="font-marker text-3xl font-bold text-ink mb-6">Join an Existing Team</h2>
+              <h2 className="font-marker text-3xl font-bold text-ink mb-2">Join a Team</h2>
+              <p className="font-sans text-sm text-ink/70 mb-6">(Enter Team ID given by Captain)</p>
               <input
                 type="text"
-                placeholder="Enter Team Code"
+                placeholder="Enter Team ID"
                 value={joinCode}
                 onChange={(e) => setJoinCode(e.target.value)}
-                className="w-full bg-white border-2 border-ink text-ink font-mono text-lg p-3 mb-6 focus:outline-none focus:border-neon-cyan"
+                className="w-full bg-white border-2 border-ink text-ink font-mono text-lg p-3 mb-6 focus:outline-none focus:border-neon-cyan uppercase"
               />
               <button onClick={handleJoinTeam} className="w-full bg-neon-cyan text-ink font-marker text-2xl py-3 wobbly-border hover:bg-neon-pink transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)]">
                 Join Team
@@ -126,7 +128,7 @@ export default function Dashboard() {
               </div>
               <h2 className="font-marker text-4xl text-ink text-center mb-2">{team.name}</h2>
               <div className="border-y-2 border-ink/20 py-2 my-4 text-center">
-                <p className="font-mono text-sm text-ink-light">Team Code</p>
+                <p className="font-mono text-sm text-ink-light">Team ID</p>
                 <p className="font-mono text-xl font-bold text-ink">{team.code}</p>
               </div>
               <p className="font-sans text-sm font-bold text-ink mb-2">Members:</p>
