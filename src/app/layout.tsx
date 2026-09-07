@@ -21,8 +21,20 @@ const courierPrime = Courier_Prime({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://placeittestweb.vercel.app"),
   title: "PlaceIT 5.0 - IEEE PCS Ideathon",
   description: "PlaceIT 5.0 is the flagship ideathon by IEEE PCS.",
+  openGraph: {
+    title: "PlaceIT 5.0 - IEEE PCS Ideathon",
+    description: "PlaceIT 5.0 is the flagship ideathon by IEEE PCS.",
+    images: ["/opengraph-image.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PlaceIT 5.0 - IEEE PCS Ideathon",
+    description: "PlaceIT 5.0 is the flagship ideathon by IEEE PCS.",
+    images: ["/twitter-image.jpg"],
+  },
 };
 
 export default function RootLayout({
