@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
@@ -20,8 +21,8 @@ export default function Navbar() {
         <div className="tape -top-2 left-10 rotate-3"></div>
 
         <div className="flex-shrink-0 flex items-center">
-          <Link href="/" className="font-marker text-3xl font-bold text-ink hover:text-neon-pink transition-colors">
-            Place<span className="text-neon-mint">IT</span> <span className="text-ink-light">5.0</span>
+          <Link href="/" className="hover:scale-105 transition-transform inline-block">
+            <Image src="/logo.jpg" alt="PlaceIT 5.0 Logo" width={120} height={40} className="w-auto h-12 rounded-sm" />
           </Link>
         </div>
 
