@@ -21,8 +21,8 @@ const courierPrime = Courier_Prime({
 });
 
 export const metadata: Metadata = {
-  title: "PlaceIT - IEEE PCS Ideathon",
-  description: "PlaceIT is the flagship ideathon by IEEE PCS.",
+  title: "PlaceIT 5.0 - IEEE PCS Ideathon",
+  description: "PlaceIT 5.0 is the flagship ideathon by IEEE PCS.",
 };
 
 export default function RootLayout({

@@ -216,35 +216,49 @@ export default function Dashboard() {
 
       {/* Statement Details Modal */}
       {selectedStatement && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-sm">
-          <div className="bg-canvas max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8 relative wobbly-border shadow-[12px_12px_0px_rgba(26,26,26,1)]">
-            <button 
-              onClick={() => setSelectedStatement(null)}
-              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-neon-pink text-ink font-marker text-xl wobbly-border-alt hover:bg-neon-yellow transition-colors"
-            >
-              X
-            </button>
-            
-            <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-2"></div>
-            
-            <span className="font-mono text-sm font-bold text-ink/50 block mb-2">{selectedStatement.id}</span>
-            <h2 className="font-marker text-4xl text-ink mb-8 leading-tight">{selectedStatement.title}</h2>
-            
-            <div className="space-y-6 font-sans text-lg text-ink">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/40 backdrop-blur-sm"
+          onClick={() => setSelectedStatement(null)}
+        >
+          <div 
+            className="bg-canvas max-w-3xl w-full max-h-[90vh] flex flex-col relative wobbly-border shadow-[12px_12px_0px_rgba(26,26,26,1)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header (Fixed) */}
+            <div className="p-6 pb-2 flex justify-between items-start border-b-2 border-ink/10 relative z-10 bg-canvas">
+              <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-2"></div>
               <div>
-                <h3 className="font-marker text-2xl bg-neon-yellow/30 inline-block px-2 mb-2 -rotate-1">Problem Statement:</h3>
+                <span className="font-mono text-sm font-bold text-ink/50 block mb-1">{selectedStatement.id}</span>
+                <h2 className="font-marker text-3xl md:text-4xl text-ink leading-tight pr-8">{selectedStatement.title}</h2>
+              </div>
+              <button 
+                onClick={() => setSelectedStatement(null)}
+                className="w-10 h-10 shrink-0 flex items-center justify-center bg-neon-pink text-ink font-marker text-xl wobbly-border-alt hover:bg-neon-yellow transition-colors shadow-sm"
+              >
+                X
+              </button>
+            </div>
+            
+            {/* Modal Body (Scrollable) */}
+            <div className="p-6 overflow-y-auto font-sans text-lg text-ink space-y-6">
+              
+              <div>
+                <h3 className="font-marker text-2xl bg-neon-yellow/30 inline-block px-2 mb-2 -rotate-1">The Core Problem:</h3>
                 <p className="leading-relaxed">{selectedStatement.problem}</p>
               </div>
+
+              {selectedStatement.easy && (
+                <div className="bg-kraft/30 p-4 wobbly-border-alt text-base">
+                  <span className="font-bold font-mono uppercase text-ink/70 block mb-1">In simple terms:</span>
+                  <p className="leading-relaxed">{selectedStatement.easy}</p>
+                </div>
+              )}
               
               <div className="border-l-4 border-neon-cyan pl-4 py-2 bg-white/50">
-                <h3 className="font-marker text-2xl bg-neon-cyan/30 inline-block px-2 mb-2 rotate-1">Challenge:</h3>
+                <h3 className="font-marker text-2xl bg-neon-cyan/30 inline-block px-2 mb-2 rotate-1">Your Challenge:</h3>
                 <p className="leading-relaxed font-bold italic">{selectedStatement.challenge}</p>
               </div>
               
-              <div>
-                <h3 className="font-marker text-2xl bg-neon-mint/30 inline-block px-2 mb-2 -rotate-1">Why it works for an ideathon:</h3>
-                <p className="leading-relaxed">{selectedStatement.why}</p>
-              </div>
             </div>
           </div>
         </div>

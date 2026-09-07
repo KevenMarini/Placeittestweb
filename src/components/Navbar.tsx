@@ -19,10 +19,9 @@ export default function Navbar() {
         {/* Tape decoration */}
         <div className="tape -top-2 left-10 rotate-3"></div>
 
-        {/* Logo */}
         <div className="flex-shrink-0 flex items-center">
           <Link href="/" className="font-marker text-3xl font-bold text-ink hover:text-neon-pink transition-colors">
-            Place<span className="text-neon-mint">IT</span>
+            Place<span className="text-neon-mint">IT</span> <span className="text-ink-light">5.0</span>
           </Link>
         </div>
 

@@ -54,9 +54,9 @@ export default function Hero() {
           </div>
           
           <h1 className="font-marker text-7xl md:text-9xl text-ink leading-none">
-            Place<span className="text-neon-mint">IT</span>
+            PlaceIT
             <br />
-            <span className="text-5xl md:text-7xl text-ink-light">Ideathon '26</span>
+            <span className="text-5xl md:text-7xl text-ink-light">5.0</span>
           </h1>
           
           <p className="font-sans text-xl text-ink-light max-w-lg font-medium bg-white/50 p-4 wobbly-border-alt">
