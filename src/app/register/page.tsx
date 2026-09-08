@@ -15,20 +15,44 @@ export default function Register() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.regNo || !formData.password) return;
     if (!isLogin && !formData.username) return;
     
-    setIsSubmitted(true);
+    setErrorMsg("");
+    
+    try {
+      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        setErrorMsg(data.error || "An error occurred");
+        return;
+      }
+      
+      setIsSubmitted(true);
+      
+      // Still using localStorage for frontend session, but now it has real data
+      localStorage.setItem("placeit_user", JSON.stringify(data.user));
 
-    setTimeout(() => {
-      localStorage.setItem("placeit_user", JSON.stringify({
-        regNo: formData.regNo,
-        username: isLogin ? "Ideator" : formData.username, // Mock user name on login
-      }));
-      router.push("/dashboard");
-    }, 1500);
+      if (data.user.role === 'main_admin' || data.user.role === 'sub_admin') {
+        setTimeout(() => router.push("/admin"), 1000);
+      } else {
+        setTimeout(() => router.push("/dashboard"), 1000);
+      }
+      
+    } catch (err) {
+      setErrorMsg("Network error. Please try again.");
+    }
   };
 
   return (
@@ -104,6 +128,12 @@ export default function Register() {
               &larr; Back
             </button>
           </div>
+
+          {errorMsg && (
+            <div className="bg-red-100 border-l-4 border-neon-pink p-3 mb-4">
+              <p className="font-sans text-sm text-red-900 font-bold">{errorMsg}</p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6 flex-grow">
             <div className="space-y-1">

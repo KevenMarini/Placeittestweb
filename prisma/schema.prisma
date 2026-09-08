@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // Uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses a direct connection
+}
+
+model User {
+  id        String   @id @default(cuid())
+  regNo     String   @unique
+  username  String
+  password  String   // Stored in plaintext as requested for hackathon use-case
+  isLeader  Boolean  @default(false)
+  
+  teamId    String?
+  team      Team?    @relation(fields: [teamId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Team {
+  id             String   @id @default(cuid())
+  name           String
+  code           String   @unique
+  isConfirmed    Boolean  @default(false)
+  domain         String?
+  statementId    String?
+  statementTitle String?
+  isLocked       Boolean  @default(false)
+  
+  members        User[]
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  isMain    Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  message   String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminUser String
+  action    String
+  details   String?
+  
+  createdAt DateTime @default(now())
+}

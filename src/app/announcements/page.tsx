@@ -1,20 +1,22 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 export default function Announcements() {
-  const announcements = [
-    {
-      id: 1,
-      title: "Ideathon Kickoff!",
-      date: "September 8, 2026 - 09:00 AM",
-      content: "Welcome to PlaceIT 5.0! Registration is officially open. Gather your team, finalize your secret passcode, and review the problem statements in the dashboard.",
-      important: true,
-    },
-    {
-      id: 2,
-      title: "Problem Statements Revealed",
-      date: "September 8, 2026 - 10:30 AM",
-      content: "All 30 problem statements across our domains (including the newly added Mathematical Models & NLMs) have been published to the dashboard. Start brainstorming!",
-      important: false,
-    }
-  ];
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/announcements")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setAnnouncements(data.announcements);
+        }
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   return (
     <div className="min-h-screen pt-24 pb-12 px-4 max-w-4xl mx-auto">
@@ -29,21 +31,22 @@ export default function Announcements() {
       </div>
 
       <div className="space-y-8">
-        {announcements.length > 0 ? (
-          announcements.map((ann) => (
+        {loading ? (
+          <div className="text-center font-marker text-2xl text-ink-light">Loading...</div>
+        ) : announcements.length > 0 ? (
+          announcements.map((ann, i) => (
             <div 
               key={ann.id} 
-              className={`bg-white p-6 md:p-8 wobbly-border shadow-[6px_6px_0px_rgba(26,26,26,0.2)] relative ${ann.important ? 'border-l-[16px] border-l-neon-pink' : 'border-l-[16px] border-l-neon-yellow'}`}
+              className={`bg-white p-6 md:p-8 wobbly-border shadow-[6px_6px_0px_rgba(26,26,26,0.2)] relative ${i === 0 ? 'border-l-[16px] border-l-neon-pink' : 'border-l-[16px] border-l-neon-yellow'}`}
             >
               <div className="tape -top-3 right-10 rotate-3"></div>
               <div className="flex justify-between items-start mb-4 gap-4 flex-col md:flex-row">
-                <h2 className="font-marker text-3xl text-ink leading-tight">{ann.title}</h2>
                 <span className="font-mono text-sm font-bold text-ink-light shrink-0 bg-canvas px-2 py-1 border border-ink/20">
-                  {ann.date}
+                  {new Date(ann.createdAt).toLocaleString()}
                 </span>
               </div>
-              <p className="font-sans text-lg text-ink leading-relaxed">
-                {ann.content}
+              <p className="font-sans text-lg text-ink leading-relaxed whitespace-pre-wrap">
+                {ann.message}
               </p>
             </div>
           ))

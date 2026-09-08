@@ -1,0 +1,9 @@
+- [ ] Set up Prisma Schema & Database
+- [ ] Create Database Seed for Admin
+- [ ] Build `/api/auth` (Register/Login)
+- [ ] Build `/api/teams` (Create, Join, Confirm)
+- [ ] Build `/api/admin` (Users, Teams, Announce, Logs, Assign Problem)
+- [ ] Update Frontend: `/register` to use API
+- [ ] Update Frontend: `/dashboard` to use API & Team logic
+- [ ] Create Frontend: `/admin` Dashboard
+- [ ] Update Frontend: `/announcements` to use API

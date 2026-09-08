@@ -16,113 +16,143 @@ const domains = [
 
 export default function Dashboard() {
   const router = useRouter();
-  const [user, setUser] = useState<{regNo: string, username: string} | null>(null);
-  const [team, setTeam] = useState<{name: string, code: string, members: string[], statementId?: string} | null>(null);
-  const [joinCode, setJoinCode] = useState("");
-  const [newTeamName, setNewTeamName] = useState("");
+  const [user, setUser] = useState<any>(null);
+  const [team, setTeam] = useState<any>(null);
+  
+  // Create / Join Forms
+  const [createTeamName, setCreateTeamName] = useState("");
+  const [joinTeamCode, setJoinTeamCode] = useState("");
+
+  const [viewingStatements, setViewingStatements] = useState(false);
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<any | null>(null);
-  const [viewingStatements, setViewingStatements] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("placeit_user");
-    if (!storedUser) {
+    const userStr = localStorage.getItem("placeit_user");
+    if (!userStr) {
       router.push("/register");
       return;
     }
-    setUser(JSON.parse(storedUser));
+    const parsedUser = JSON.parse(userStr);
     
-    const storedTeam = localStorage.getItem("placeit_team");
-    if (storedTeam) {
-      setTeam(JSON.parse(storedTeam));
-    }
+    // Fetch fresh state
+    fetch("/api/teams/me", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ regNo: parsedUser.regNo })
+    }).then(res => res.json()).then(data => {
+      if (data.success) {
+        setUser(data.user);
+        setTeam(data.user.team);
+      } else {
+        setUser(parsedUser); // fallback
+      }
+    });
   }, [router]);
 
-  const handleCreateTeam = () => {
-    if (!newTeamName) return;
-    const newTeam = {
-      name: newTeamName,
-      code: `TEAM_${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-      members: [`${user?.username || "Unknown"} (Captain)`],
-    };
-    setTeam(newTeam);
-    localStorage.setItem("placeit_team", JSON.stringify(newTeam));
+  const handleCreateTeam = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!createTeamName) return;
+    const res = await fetch("/api/teams/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ regNo: user.regNo, teamName: createTeamName })
+    });
+    const data = await res.json();
+    if (data.success) window.location.reload();
+    else alert(data.error);
   };
 
-  const handleJoinTeam = () => {
-    if (!joinCode) return;
-    const newTeam = {
-      name: "Joined Team",
-      code: joinCode,
-      members: ["Captain", user?.username || "Unknown"],
-    };
-    setTeam(newTeam);
-    localStorage.setItem("placeit_team", JSON.stringify(newTeam));
+  const handleJoinTeam = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!joinTeamCode) return;
+    const res = await fetch("/api/teams/join", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ regNo: user.regNo, code: joinTeamCode })
+    });
+    const data = await res.json();
+    if (data.success) window.location.reload();
+    else alert(data.error);
   };
 
-  if (!user) return <div className="min-h-screen flex items-center justify-center font-marker text-3xl text-ink">Checking clipboard...</div>;
+  const handleConfirmTeam = async () => {
+    const res = await fetch("/api/teams/confirm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ regNo: user.regNo, teamId: team.id })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert("Team confirmed successfully!");
+      window.location.reload();
+    } else alert(data.error);
+  };
+
+  const leaveRoom = () => {
+    localStorage.removeItem("placeit_user");
+    router.push("/");
+  };
+
+  if (!user) return <div className="min-h-screen bg-canvas pt-24 text-center">Loading Workspace...</div>;
+
+  const isTeamLocked = team && team.isLocked && team.statementId;
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 relative">
-      <div className="max-w-7xl mx-auto space-y-12">
-        
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b-4 border-ink pb-4 border-dashed">
+    <div className="min-h-screen bg-canvas pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex justify-between items-end mb-8 border-b-4 border-ink pb-4">
           <div>
-            <h1 className="font-marker text-5xl font-bold text-ink">The Workspace</h1>
-            <p className="font-mono text-sm text-ink bg-neon-yellow px-2 py-1 inline-block mt-2 -rotate-1">
-              Ideator: {user.username} | Badge: {user.regNo}
-            </p>
+            <h1 className="font-marker text-5xl md:text-6xl text-ink">Innovator Workspace</h1>
+            <p className="font-mono text-ink-light mt-2">ID: {user.regNo} | Alias: {user.username}</p>
           </div>
-          <button 
-            onClick={() => { 
-              localStorage.removeItem("placeit_user"); 
-              localStorage.removeItem("placeit_team"); 
-              router.push("/register"); 
-            }}
-            className="font-marker text-xl text-ink underline decoration-wavy hover:text-neon-pink transition-colors"
-          >
+          <button onClick={leaveRoom} className="font-marker text-2xl text-neon-pink underline decoration-wavy hover:text-ink transition-colors">
             Leave Room
           </button>
         </div>
 
         {!team ? (
-          /* TEAM FORMATION SECTION */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="bg-white p-8 wobbly-border shadow-[8px_8px_0px_rgba(26,26,26,0.1)] relative">
-              <div className="tape -top-3 left-1/2 -translate-x-1/2"></div>
-              <h2 className="font-marker text-3xl font-bold text-ink mb-2">Make a Team</h2>
-              <p className="font-sans text-sm text-ink-light mb-6">(Become the Team Leader)</p>
-              <input
-                type="text"
-                placeholder="Awesome Team Name"
-                value={newTeamName}
-                onChange={(e) => setNewTeamName(e.target.value)}
-                className="w-full bg-canvas border-2 border-ink text-ink font-sans text-lg p-3 mb-6 focus:outline-none focus:border-neon-mint"
-              />
-              <button onClick={handleCreateTeam} className="w-full bg-neon-mint text-ink font-marker text-2xl py-3 wobbly-border-alt hover:bg-neon-yellow transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)]">
-                Create Team
-              </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+            <div className="bg-white p-8 relative shadow-lg wobbly-border-alt">
+              <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-1"></div>
+              <h2 className="font-marker text-3xl text-ink mb-2">Make a Team</h2>
+              <p className="font-sans text-ink-light mb-6">Become the Team Captain</p>
+              
+              <form onSubmit={handleCreateTeam} className="space-y-4">
+                <input
+                  type="text"
+                  required
+                  value={createTeamName}
+                  onChange={(e) => setCreateTeamName(e.target.value)}
+                  placeholder="Enter Team Name..."
+                  className="w-full bg-transparent border-b-2 border-ink p-2 font-sans text-lg focus:outline-none focus:border-neon-pink"
+                />
+                <button type="submit" className="w-full font-marker text-2xl bg-neon-cyan py-3 text-ink wobbly-border shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:bg-neon-pink hover:text-white transition-colors">
+                  Create Crew
+                </button>
+              </form>
             </div>
 
             <div className="bg-kraft p-8 wobbly-border shadow-[8px_8px_0px_rgba(26,26,26,0.1)] relative">
               <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-3"></div>
               <h2 className="font-marker text-3xl font-bold text-ink mb-2">Join a Team</h2>
               <p className="font-sans text-sm text-ink/70 mb-6">(Enter Team ID given by Captain)</p>
-              <input
-                type="text"
-                placeholder="Enter Team ID"
-                value={joinCode}
-                onChange={(e) => setJoinCode(e.target.value)}
-                className="w-full bg-white border-2 border-ink text-ink font-mono text-lg p-3 mb-6 focus:outline-none focus:border-neon-cyan uppercase"
-              />
-              <button onClick={handleJoinTeam} className="w-full bg-neon-cyan text-ink font-marker text-2xl py-3 wobbly-border hover:bg-neon-pink transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)]">
-                Join Team
-              </button>
+              <form onSubmit={handleJoinTeam}>
+                <input
+                  type="text"
+                  placeholder="Enter Team ID"
+                  required
+                  value={joinTeamCode}
+                  onChange={(e) => setJoinTeamCode(e.target.value)}
+                  className="w-full bg-white border-2 border-ink text-ink font-mono text-lg p-3 mb-6 focus:outline-none focus:border-neon-cyan uppercase"
+                />
+                <button type="submit" className="w-full bg-neon-cyan text-ink font-marker text-2xl py-3 wobbly-border hover:bg-neon-pink transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)]">
+                  Join Team
+                </button>
+              </form>
             </div>
           </div>
         ) : (
-          /* TEAM DASHBOARD SECTION */
           <div className="space-y-12">
             
             {/* Team Index Card */}
@@ -134,26 +164,44 @@ export default function Dashboard() {
               <div className="border-y-2 border-ink/20 py-2 my-4 text-center">
                 <p className="font-mono text-sm text-ink-light">Team ID</p>
                 <p className="font-mono text-xl font-bold text-ink">{team.code}</p>
+                <p className="mt-2 font-sans font-bold text-sm">Status: {team.isConfirmed ? "Confirmed ✓" : "Forming..."}</p>
               </div>
               <p className="font-sans text-sm font-bold text-ink mb-2">Members:</p>
-              <ul className="font-marker text-xl text-ink space-y-1 mb-6">
-                {team.members.map((m, i) => <li key={i}>- {m}</li>)}
+              <ul className="font-sans text-ink space-y-1 mb-6">
+                {team.members.map((m: any) => (
+                  <li key={m.id}>
+                    <span className="font-bold">{m.regNo}</span> - {m.username} {m.isLeader && <span className="text-xs bg-ink text-white px-1 ml-1 rounded">Captain</span>}
+                  </li>
+                ))}
               </ul>
-              <div className="text-center">
-                <button 
-                  onClick={() => {
-                    localStorage.removeItem("placeit_team");
-                    setTeam(null);
-                  }}
-                  className="font-sans text-sm text-ink-light underline hover:text-neon-pink transition-colors"
-                >
-                  Leave Team
-                </button>
-              </div>
+
+              {user.isLeader && !team.isConfirmed && (
+                <div className="mb-4 bg-red-50 p-2 border-l-4 border-red-500 text-center">
+                  <p className="font-sans text-xs text-red-700 mb-2 font-bold">
+                    Need 2-4 members to confirm.
+                  </p>
+                  <button 
+                    onClick={handleConfirmTeam}
+                    className="bg-red-500 text-white font-bold px-4 py-1 text-sm hover:bg-red-600 transition"
+                  >
+                    Confirm Team
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Bidding & Domains Flow */}
-            {!viewingStatements ? (
+            {isTeamLocked ? (
+              <div className="mt-16 bg-white p-8 shadow-xl wobbly-border-alt border-4 border-neon-cyan relative max-w-2xl mx-auto">
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-neon-cyan text-ink font-marker text-3xl px-8 py-2 wobbly-border rotate-2 whitespace-nowrap">
+                  ASSIGNED BLUEPRINT
+                </div>
+                <div className="mt-6 text-center">
+                  <h3 className="font-marker text-3xl text-ink mb-4">{team.statementTitle}</h3>
+                  <p className="font-mono mt-2 bg-ink text-white inline-block px-4 py-2">Domain: {team.domain} | ID: {team.statementId}</p>
+                </div>
+              </div>
+            ) : !viewingStatements ? (
               <div className="text-center mt-16 mb-12">
                 <h2 className="font-marker text-5xl font-bold text-ink inline-block bg-neon-yellow px-6 py-2 wobbly-border shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-2">
                   IT'S TIME FOR BIDDING!
