@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useDragControls } from "framer-motion";
 
 export default function Hero() {
@@ -15,6 +15,32 @@ export default function Hero() {
 
   const [newStickyText, setNewStickyText] = useState("");
   const [newStickyColor, setNewStickyColor] = useState("bg-neon-yellow");
+
+  // Countdown Timer State
+  const targetDate = new Date("2026-09-15T09:00:00").getTime();
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        clearInterval(interval);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      setTimeLeft({
+        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((distance % (1000 * 60)) / 1000),
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [targetDate]);
 
   const addSticky = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,8 +84,31 @@ export default function Hero() {
             <br />
             <span className="text-5xl md:text-7xl text-ink-light">5.0</span>
           </h1>
+
+          {/* Countdown Timer */}
+          <div className="flex gap-4 font-mono font-bold text-2xl text-ink mt-2">
+            <div className="flex flex-col items-center bg-white p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] rotate-1">
+              <span className="text-neon-pink text-4xl">{String(timeLeft.days).padStart(2, '0')}</span>
+              <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Days</span>
+            </div>
+            <span className="self-center text-4xl">:</span>
+            <div className="flex flex-col items-center bg-white p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-2">
+              <span className="text-neon-cyan text-4xl">{String(timeLeft.hours).padStart(2, '0')}</span>
+              <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Hrs</span>
+            </div>
+            <span className="self-center text-4xl">:</span>
+            <div className="flex flex-col items-center bg-white p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] rotate-3">
+              <span className="text-neon-mint text-4xl">{String(timeLeft.minutes).padStart(2, '0')}</span>
+              <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Mins</span>
+            </div>
+            <span className="self-center text-4xl">:</span>
+            <div className="flex flex-col items-center bg-white p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-1">
+              <span className="text-neon-yellow text-4xl">{String(timeLeft.seconds).padStart(2, '0')}</span>
+              <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Secs</span>
+            </div>
+          </div>
           
-          <p className="font-sans text-xl text-ink-light max-w-lg font-medium bg-white/50 p-4 wobbly-border-alt">
+          <p className="font-sans text-xl text-ink-light max-w-lg font-medium bg-white/50 p-4 wobbly-border-alt mt-2">
             Grab a marker. Join a team. Build tangible prototypes from raw concepts in our ultimate whiteboard session.
           </p>
 

@@ -58,6 +58,14 @@ export default function Navbar() {
           >
             Login
           </Link>
+          <a
+            href="https://gravitas.vit.ac.in/events/26a62ec7-d68b-4808-8c2b-d06843af19d6"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-marker text-xl font-bold text-ink bg-neon-yellow px-6 py-2 wobbly-border hover:bg-neon-pink hover:text-white transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] -translate-y-1 hover:-translate-y-2 hidden sm:inline-block"
+          >
+            Register Now
+          </a>
         </div>
       </div>
     </nav>
