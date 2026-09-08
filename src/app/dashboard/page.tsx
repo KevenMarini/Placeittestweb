@@ -202,16 +202,48 @@ export default function Dashboard() {
 
             {/* Bidding & Domains Flow */}
             {isTeamLocked ? (
-              <div className="mt-16 bg-paper p-8 shadow-xl wobbly-border-alt border-4 border-neon-cyan relative max-w-2xl mx-auto">
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-neon-cyan text-ink font-marker text-3xl px-8 py-2 wobbly-border rotate-2 whitespace-nowrap">
+              <div className="mt-16 bg-paper p-8 shadow-xl wobbly-border-alt border-4 border-neon-cyan relative max-w-4xl mx-auto">
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-neon-cyan text-ink font-marker text-3xl px-8 py-2 wobbly-border rotate-2 whitespace-nowrap z-10">
                   ASSIGNED BLUEPRINT
                 </div>
-                <div className="mt-6 text-center">
-                  <h3 className="font-marker text-3xl text-ink mb-4">{team.statementTitle}</h3>
-                  <p className="font-mono mt-2 bg-ink text-white inline-block px-4 py-2">
-                    Domain: {team.domain} {team.statementTrack ? `| Track: ${team.statementTrack}` : ''}
-                  </p>
-                </div>
+                
+                {(() => {
+                  const assignedStatement = statements.find(s => s.id === team.statementId);
+                  if (!assignedStatement) return (
+                    <div className="mt-6 text-center">
+                      <h3 className="font-marker text-3xl text-ink mb-4">{team.statementTitle}</h3>
+                      <p className="font-mono mt-2 bg-ink text-white inline-block px-4 py-2">
+                        Domain: {team.domain} {team.statementTrack ? `| Track: ${team.statementTrack}` : ''}
+                      </p>
+                    </div>
+                  );
+                  
+                  return (
+                    <div className="mt-8 text-left space-y-6">
+                      <div className="text-center mb-8 border-b-2 border-ink/10 pb-6">
+                        <span className="font-mono font-bold text-ink/60 mb-2 block">[{assignedStatement.domain}] {assignedStatement.track}</span>
+                        <h3 className="font-marker text-4xl text-ink leading-tight">{assignedStatement.title}</h3>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-marker text-2xl bg-neon-yellow/30 inline-block px-2 mb-2 -rotate-1 text-ink">The Core Problem:</h4>
+                        <p className="font-sans text-lg text-ink leading-relaxed whitespace-pre-wrap">{assignedStatement.problem}</p>
+                      </div>
+
+                      <div className="border-l-4 border-neon-cyan pl-4 py-2 bg-canvas/50">
+                        <h4 className="font-marker text-2xl bg-neon-cyan/30 inline-block px-2 mb-2 rotate-1 text-ink">Your Challenge:</h4>
+                        <p className="font-sans text-lg text-ink leading-relaxed font-bold italic whitespace-pre-wrap">{assignedStatement.challenge}</p>
+                      </div>
+
+                      {assignedStatement.description && (
+                        <div className="bg-kraft/30 p-4 wobbly-border-alt">
+                          <span className="font-bold font-mono uppercase text-ink/70 block mb-1">In simple terms:</span>
+                          <p className="font-sans text-ink leading-relaxed whitespace-pre-wrap">{assignedStatement.description}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             ) : !viewingStatements ? (
               <div className="text-center mt-16 mb-12">
@@ -336,9 +368,21 @@ export default function Dashboard() {
               
               <div className="p-6 overflow-y-auto font-sans text-lg text-ink space-y-6 bg-paper">
                 <div>
-                  <h3 className="font-marker text-2xl bg-neon-yellow/30 inline-block px-2 mb-2 -rotate-1">Description:</h3>
-                  <p className="leading-relaxed whitespace-pre-wrap">{selectedStatement.description}</p>
+                  <h3 className="font-marker text-2xl bg-neon-yellow/30 inline-block px-2 mb-2 -rotate-1 text-ink">The Core Problem:</h3>
+                  <p className="leading-relaxed whitespace-pre-wrap text-ink">{selectedStatement.problem}</p>
                 </div>
+
+                <div className="border-l-4 border-neon-cyan pl-4 py-2 bg-canvas/50">
+                  <h3 className="font-marker text-2xl bg-neon-cyan/30 inline-block px-2 mb-2 rotate-1 text-ink">Your Challenge:</h3>
+                  <p className="leading-relaxed font-bold italic whitespace-pre-wrap text-ink">{selectedStatement.challenge}</p>
+                </div>
+
+                {selectedStatement.description && (
+                  <div className="bg-kraft/30 p-4 wobbly-border-alt">
+                    <span className="font-bold font-mono uppercase text-ink/70 block mb-1">In simple terms:</span>
+                    <p className="leading-relaxed whitespace-pre-wrap text-ink">{selectedStatement.description}</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

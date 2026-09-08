@@ -20,12 +20,19 @@ export async function POST(request: Request) {
       });
     }
 
-    // Check for Sub Admin Login
-    const admin = await prisma.admin.findUnique({
-      where: { username: formattedRegNo },
+    // Check for Sub Admin Login — try original casing first, then uppercase
+    const admin = await prisma.admin.findFirst({
+      where: {
+        OR: [
+          { username: regNo.trim() },
+          { username: formattedRegNo },
+          { username: regNo.trim().toLowerCase() },
+        ],
+        password: password,
+      },
     });
 
-    if (admin && admin.password === password) {
+    if (admin) {
       return NextResponse.json({
         success: true,
         user: { regNo: "admin", username: admin.username, role: admin.isMain ? "main_admin" : "sub_admin" },

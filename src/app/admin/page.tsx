@@ -24,6 +24,8 @@ export default function AdminPage() {
   const [newPSDomain, setNewPSDomain] = useState("");
   const [newPSTrack, setNewPSTrack] = useState("");
   const [newPSTitle, setNewPSTitle] = useState("");
+  const [newPSProblem, setNewPSProblem] = useState("");
+  const [newPSChallenge, setNewPSChallenge] = useState("");
   const [newPSDesc, setNewPSDesc] = useState("");
 
   // Teams tab state mapping for cascading dropdowns (teamId -> selectedDomain)
@@ -95,16 +97,46 @@ export default function AdminPage() {
 
   const addStatement = async () => {
     const domainToUse = activeDomain || newPSDomain;
-    if (!domainToUse || !newPSTrack || !newPSTitle) return;
+    if (!domainToUse || !newPSTrack || !newPSTitle || !newPSProblem || !newPSChallenge) return;
     await fetch("/api/admin/statements", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ domain: domainToUse, track: newPSTrack, title: newPSTitle, description: newPSDesc, adminUser: admin.username })
+      body: JSON.stringify({ 
+        domain: domainToUse, 
+        track: newPSTrack, 
+        title: newPSTitle, 
+        problem: newPSProblem,
+        challenge: newPSChallenge,
+        description: newPSDesc, 
+        adminUser: admin.username 
+      })
     });
     setNewPSDomain("");
     setNewPSTrack("");
     setNewPSTitle("");
+    setNewPSProblem("");
+    setNewPSChallenge("");
     setNewPSDesc("");
+    fetchData(admin);
+  };
+
+  const deleteDomain = async (domain: string) => {
+    if (!confirm(`Are you sure you want to delete ALL tracks in ${domain}?`)) return;
+    await fetch("/api/admin/statements", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: 'domain', domain, adminUser: admin.username })
+    });
+    fetchData(admin);
+  };
+
+  const deleteTrack = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this specific track?")) return;
+    await fetch("/api/admin/statements", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: 'track', id, adminUser: admin.username })
+    });
     fetchData(admin);
   };
 
@@ -169,12 +201,39 @@ export default function AdminPage() {
               Logged in as: {admin.username} ({admin.role})
             </p>
           </div>
-          <button 
-            onClick={() => { localStorage.removeItem("placeit_user"); router.push("/"); }}
-            className="font-marker text-2xl text-ink underline decoration-wavy hover:text-neon-cyan transition-colors"
-          >
-            Logout Admin
-          </button>
+          <div className="flex items-center gap-4">
+            {admin.role === "main_admin" && (
+              <button
+                onClick={async () => {
+                  if (!confirm("⚠️ DANGER: This will PERMANENTLY delete ALL participants, teams, statements, announcements, and sub-admins. Are you absolutely sure?")) return;
+                  if (!confirm("This is your FINAL warning. Type OK in the next prompt to confirm.")) return;
+                  const r = prompt("Type CLEAR to confirm wipe:");
+                  if (r !== "CLEAR") { alert("Cancelled."); return; }
+                  const res = await fetch("/api/admin/cleardata", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ adminUser: admin.username })
+                  });
+                  const data = await res.json();
+                  if (data.success) {
+                    alert("✅ All data cleared successfully!");
+                    fetchData(admin);
+                  } else {
+                    alert("Error: " + data.error);
+                  }
+                }}
+                className="font-marker text-lg text-white bg-red-600 px-4 py-2 border-2 border-red-800 hover:bg-red-800 transition-colors shadow-[2px_2px_0px_rgba(0,0,0,0.5)]"
+              >
+                🗑️ Clear All Data
+              </button>
+            )}
+            <button 
+              onClick={() => { localStorage.removeItem("placeit_user"); router.push("/"); }}
+              className="font-marker text-2xl text-ink underline decoration-wavy hover:text-neon-cyan transition-colors"
+            >
+              Logout Admin
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-4 mb-8">
@@ -236,14 +295,24 @@ export default function AdminPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {uniqueDomains.map(d => (
-                    <button 
+                    <div 
                       key={d} 
-                      onClick={() => setActiveDomain(d)}
-                      className="bg-paper p-6 border-4 border-ink shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:bg-neon-yellow hover:-translate-y-1 transition-all text-left"
+                      className="bg-paper p-6 border-4 border-ink shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:-translate-y-1 transition-transform relative"
                     >
-                      <h3 className="font-marker text-2xl text-ink">{d}</h3>
-                      <p className="font-sans text-ink-light text-sm mt-2">{statements.filter(s => s.domain === d).length} Blueprints</p>
-                    </button>
+                      <button 
+                        onClick={() => setActiveDomain(d)}
+                        className="text-left w-full h-full block hover:bg-neon-yellow p-4 -m-4 rounded"
+                      >
+                        <h3 className="font-marker text-2xl text-ink">{d}</h3>
+                        <p className="font-sans text-ink-light text-sm mt-2">{statements.filter(s => s.domain === d).length} Blueprints</p>
+                      </button>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); deleteDomain(d); }}
+                        className="absolute top-2 right-2 text-xs bg-red-100 text-red-600 px-2 py-1 rounded border border-red-300 hover:bg-red-200 z-10 font-bold"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -252,38 +321,63 @@ export default function AdminPage() {
                 <button onClick={() => setActiveDomain(null)} className="font-sans font-bold text-ink underline mb-6 hover:text-neon-pink">&larr; Back to Domains</button>
                 <h2 className="font-marker text-4xl mb-6 text-neon-cyan inline-block bg-ink text-white px-4 py-1 -rotate-1">{activeDomain}</h2>
                 
-                <div className="bg-kraft p-4 mb-8 border-2 border-ink border-dashed">
+                <div className="bg-kraft p-6 mb-8 border-2 border-ink border-dashed">
                   <h3 className="font-marker text-xl mb-4 text-ink">Add Blueprint to {activeDomain}</h3>
-                  <div className="flex flex-wrap gap-4 items-end">
-                    <div className="flex-1 min-w-[150px]">
-                      <label className="block font-bold text-xs text-ink">Track</label>
-                      <input type="text" value={newPSTrack} onChange={(e)=>setNewPSTrack(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="e.g. Track 1" />
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-wrap gap-4">
+                      <div className="flex-1 min-w-[150px]">
+                        <label className="block font-bold text-xs text-ink mb-1">Track</label>
+                        <input type="text" value={newPSTrack} onChange={(e)=>setNewPSTrack(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="e.g. Track 1" />
+                      </div>
+                      <div className="flex-[2] min-w-[200px]">
+                        <label className="block font-bold text-xs text-ink mb-1">Statement Title</label>
+                        <input type="text" value={newPSTitle} onChange={(e)=>setNewPSTitle(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="e.g. AI Med Diagnosis" />
+                      </div>
                     </div>
-                    <div className="flex-[2] min-w-[200px]">
-                      <label className="block font-bold text-xs text-ink">Statement Title</label>
-                      <input type="text" value={newPSTitle} onChange={(e)=>setNewPSTitle(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="e.g. AI Med Diagnosis" />
+                    
+                    <div>
+                      <label className="block font-bold text-xs text-ink mb-1">The Core Problem</label>
+                      <textarea value={newPSProblem} onChange={(e)=>setNewPSProblem(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper h-24" placeholder="Paste the problem statement here..." />
                     </div>
-                    <div className="flex-[2] min-w-[200px]">
-                      <label className="block font-bold text-xs text-ink">Description (optional)</label>
-                      <input type="text" value={newPSDesc} onChange={(e)=>setNewPSDesc(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="Details..." />
+
+                    <div>
+                      <label className="block font-bold text-xs text-ink mb-1">Your Challenge</label>
+                      <textarea value={newPSChallenge} onChange={(e)=>setNewPSChallenge(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper h-24" placeholder="Paste the specific challenge here..." />
                     </div>
-                    <button onClick={addStatement} className="bg-neon-pink text-white font-bold px-6 py-2 border-2 border-ink hover:bg-neon-yellow hover:text-ink">Add</button>
+
+                    <div>
+                      <label className="block font-bold text-xs text-ink mb-1">Description (In simple terms - Optional)</label>
+                      <input type="text" value={newPSDesc} onChange={(e)=>setNewPSDesc(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="Easy explanation..." />
+                    </div>
+
+                    <button onClick={addStatement} className="bg-neon-pink text-white font-bold px-6 py-3 border-2 border-ink hover:bg-neon-yellow hover:text-ink w-fit shadow-[4px_4px_0px_rgba(26,26,26,1)]">
+                      Add Statement
+                    </button>
                   </div>
                 </div>
 
-                <table className="w-full text-left font-sans border-collapse">
-                  <thead><tr className="border-b-4 border-ink bg-neon-mint text-ink"><th className="p-2">Track</th><th className="p-2">Title</th><th className="p-2">Description</th><th className="p-2">Added</th></tr></thead>
-                  <tbody>
-                    {statements.filter(s => s.domain === activeDomain).map(s => (
-                      <tr key={s.id} className="border-b-2 border-ink border-dashed text-ink">
-                        <td className="p-2 font-bold whitespace-nowrap">{s.track}</td>
-                        <td className="p-2">{s.title}</td>
-                        <td className="p-2">{s.description}</td>
-                        <td className="p-2 text-sm">{new Date(s.createdAt).toLocaleDateString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left font-sans border-collapse">
+                    <thead><tr className="border-b-4 border-ink bg-neon-mint text-ink"><th className="p-2">Track</th><th className="p-2">Title</th><th className="p-2">Added</th><th className="p-2">Actions</th></tr></thead>
+                    <tbody>
+                      {statements.filter(s => s.domain === activeDomain).map(s => (
+                        <tr key={s.id} className="border-b-2 border-ink border-dashed text-ink hover:bg-canvas/50">
+                          <td className="p-2 font-bold whitespace-nowrap">{s.track}</td>
+                          <td className="p-2">
+                            <p className="font-bold">{s.title}</p>
+                            <p className="text-xs text-ink/70 line-clamp-1 mt-1">{s.problem}</p>
+                          </td>
+                          <td className="p-2 text-sm">{new Date(s.createdAt).toLocaleDateString()}</td>
+                          <td className="p-2">
+                            <button onClick={() => deleteTrack(s.id)} className="text-xs bg-red-100 text-red-600 px-3 py-1 rounded border border-red-300 hover:bg-red-200 font-bold">
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
