@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 
 const timelineData = [
@@ -15,6 +16,72 @@ const timelineData = [
 ];
 
 export default function Timeline() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [svgPath, setSvgPath] = useState("");
+
+  const calculatePath = useCallback(() => {
+    if (!containerRef.current) return;
+    const containerRect = containerRef.current.getBoundingClientRect();
+    
+    // We only draw lines on desktop (md breakpoint) because mobile stack doesn't need this kind of string wiring
+    if (window.innerWidth < 768) {
+      setSvgPath("");
+      return;
+    }
+
+    let path = "";
+    
+    // The items should snake through the grid
+    // Row 1: 0 -> 1 -> 2
+    // Row 2: 2 -> 5 -> 4 -> 3
+    // Row 3: 3 -> 6 -> 7 -> 8
+    // To keep it simple, let's just connect them in order 0 to 8
+    
+    for (let i = 0; i < timelineData.length; i++) {
+      const card = cardRefs.current[i];
+      if (!card) continue;
+      
+      const rect = card.getBoundingClientRect();
+      
+      // Calculate center top of the card relative to the container
+      const x = rect.left - containerRect.left + rect.width / 2;
+      const y = rect.top - containerRect.top; // The pin is roughly at the top
+      
+      if (i === 0) {
+        path += `M ${x} ${y} `;
+      } else {
+        // Curve to the next pin
+        const prevCard = cardRefs.current[i - 1];
+        if (!prevCard) continue;
+        const prevRect = prevCard.getBoundingClientRect();
+        const prevX = prevRect.left - containerRect.left + prevRect.width / 2;
+        const prevY = prevRect.top - containerRect.top;
+        
+        // Control points for a nice curve
+        const cp1X = prevX + (x - prevX) / 2;
+        const cp1Y = prevY - 30; // arc up
+        const cp2X = prevX + (x - prevX) / 2;
+        const cp2Y = y - 30; // arc up
+
+        path += `C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${x} ${y} `;
+      }
+    }
+    setSvgPath(path);
+  }, []);
+
+  useEffect(() => {
+    // Initial calculation
+    // Timeout to ensure layout is complete
+    const timeout = setTimeout(calculatePath, 100);
+    
+    window.addEventListener("resize", calculatePath);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("resize", calculatePath);
+    };
+  }, [calculatePath]);
+
   return (
     <section className="py-24 relative overflow-hidden">
       <div className="max-w-5xl mx-auto px-4">
@@ -26,27 +93,31 @@ export default function Timeline() {
           </h2>
         </div>
 
-        <div className="relative border-4 border-kraft-dark bg-canvas p-8 md:p-16 rounded-md shadow-xl wobbly-border">
+        <div ref={containerRef} className="relative border-4 border-kraft-dark bg-canvas p-8 md:p-16 rounded-md shadow-xl wobbly-border">
           {/* SVG String connecting pins */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-            <motion.path 
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-              viewport={{ once: true }}
-              d="M 100 100 Q 200 50 300 150 T 500 100 T 700 200 T 800 100 T 900 300" 
-              fill="transparent" 
-              stroke="var(--color-neon-pink)" 
-              strokeWidth="3" 
-              strokeDasharray="10 10" 
-              className="hidden md:block"
-            />
-          </svg>
+          {svgPath && (
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+              <motion.path 
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                transition={{ duration: 2, ease: "easeInOut" }}
+                viewport={{ once: true }}
+                d={svgPath} 
+                fill="transparent" 
+                stroke="var(--color-neon-pink)" 
+                strokeWidth="3" 
+                strokeDasharray="8 8" 
+                strokeLinecap="round"
+                className="hidden md:block"
+              />
+            </svg>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
             {timelineData.map((item, index) => (
               <motion.div
                 key={index}
+                ref={(el) => { cardRefs.current[index] = el; }}
                 initial={{ opacity: 0, scale: 0.8, y: 20 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true }}
