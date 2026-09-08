@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 
 export default function Guidelines() {
+  const [isFlipped, setIsFlipped] = useState(false);
+
   const criteria = [
     { name: "Innovation", points: 10 },
     { name: "Feasibility", points: 10 },
@@ -77,48 +80,79 @@ export default function Guidelines() {
           </div>
         </motion.div>
 
-        {/* Right Col: Rubric (Clipboard style) */}
+        {/* Right Col: Rubric (Clipboard style as Flip Card) */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-50px" }}
-          className="relative bg-kraft-dark p-6 md:p-8 rounded-md shadow-lg -rotate-2"
+          className="relative perspective-[2000px] h-[500px]"
         >
-          {/* Clipboard clip */}
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-ink rounded-md shadow-md border-b-4 border-ink-light flex justify-center items-center">
-            <div className="w-16 h-2 bg-canvas/20 rounded-full" />
-          </div>
-
-          <div className="bg-canvas p-6 mt-4 wobbly-border">
-            <h2 className="font-marker text-3xl font-bold text-ink mb-6 text-center">
-              Evaluation Rubric
-            </h2>
-
-            <div className="divide-y-2 divide-ink/20 font-marker text-xl">
-              <div className="flex justify-between items-center py-2 text-ink-light text-lg">
-                <span>Criteria</span>
-                <span>Points</span>
+          <motion.div
+            className="w-full h-full relative preserve-3d cursor-pointer"
+            animate={{ rotateY: isFlipped ? 180 : 0 }}
+            transition={{ duration: 0.6, type: "spring", stiffness: 100, damping: 20 }}
+            onClick={() => setIsFlipped(!isFlipped)}
+          >
+            {/* FRONT SIDE */}
+            <div className="absolute inset-0 backface-hidden bg-kraft-dark p-6 md:p-8 rounded-md shadow-lg -rotate-2 flex flex-col justify-center border-4 border-kraft-dark">
+              {/* Clipboard clip */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-ink rounded-md shadow-md border-b-4 border-ink-light flex justify-center items-center z-10">
+                <div className="w-16 h-2 bg-canvas/20 rounded-full" />
               </div>
               
-              {criteria.map((item, index) => (
-                <motion.div 
-                  variants={itemVariants}
-                  whileHover={{ x: 10, color: "var(--color-neon-pink)" }}
-                  key={index} 
-                  className="flex justify-between items-center py-3 cursor-pointer transition-colors"
-                >
-                  <span className="font-sans font-bold text-ink">{item.name}</span>
-                  <span className="text-ink">{item.points}</span>
-                </motion.div>
-              ))}
-              
-              <div className="flex justify-between items-center py-4 mt-2 border-t-4 border-ink">
-                <span className="font-sans font-bold text-ink">TOTAL</span>
-                <span className="font-marker text-3xl text-neon-pink">50</span>
+              <div className="bg-canvas p-8 wobbly-border text-center h-full flex flex-col justify-center items-center relative">
+                <div className="tape -top-2 left-10 rotate-3"></div>
+                <h2 className="font-marker text-4xl text-ink mb-6">Judges' Scorecard</h2>
+                <div className="text-6xl mb-6 hover:scale-110 transition-transform">📋</div>
+                <p className="font-sans text-ink-light font-bold uppercase tracking-widest text-sm border-2 border-ink inline-block px-4 py-2 bg-neon-yellow hover:bg-neon-pink hover:text-white transition-colors">
+                  Click to Reveal Rubric
+                </p>
               </div>
             </div>
-          </div>
+
+            {/* BACK SIDE */}
+            <div className="absolute inset-0 backface-hidden rotate-y-180 bg-kraft-dark p-6 md:p-8 rounded-md shadow-lg rotate-1 border-4 border-kraft-dark flex flex-col">
+              {/* Clipboard clip */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-ink rounded-md shadow-md border-b-4 border-ink-light flex justify-center items-center z-10">
+                <div className="w-16 h-2 bg-canvas/20 rounded-full" />
+              </div>
+
+              <div className="bg-canvas p-6 mt-4 wobbly-border flex-grow flex flex-col relative overflow-y-auto">
+                <button 
+                  className="absolute top-2 right-2 text-xs font-mono text-ink-light hover:text-neon-pink z-20"
+                  onClick={(e) => { e.stopPropagation(); setIsFlipped(false); }}
+                >
+                  [FLIP BACK]
+                </button>
+                <h2 className="font-marker text-3xl font-bold text-ink mb-4 text-center mt-2">
+                  Evaluation Rubric
+                </h2>
+
+                <div className="divide-y-2 divide-ink/20 font-marker text-xl flex-grow flex flex-col justify-center">
+                  <div className="flex justify-between items-center py-2 text-ink-light text-lg">
+                    <span>Criteria</span>
+                    <span>Points</span>
+                  </div>
+                  
+                  {criteria.map((item, index) => (
+                    <div 
+                      key={index} 
+                      className="flex justify-between items-center py-2"
+                    >
+                      <span className="font-sans font-bold text-ink text-sm md:text-base">{item.name}</span>
+                      <span className="text-ink">{item.points}</span>
+                    </div>
+                  ))}
+                  
+                  <div className="flex justify-between items-center py-4 mt-2 border-t-4 border-ink">
+                    <span className="font-sans font-bold text-ink">TOTAL</span>
+                    <span className="font-marker text-3xl text-neon-pink">50</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
 
       </div>
