@@ -17,7 +17,7 @@ export default function Hero() {
   const [newStickyColor, setNewStickyColor] = useState("bg-neon-yellow");
 
   // Countdown Timer State
-  const targetDate = new Date("2026-09-15T09:00:00").getTime();
+  const targetDate = new Date("2026-09-12T09:00:00").getTime();
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
