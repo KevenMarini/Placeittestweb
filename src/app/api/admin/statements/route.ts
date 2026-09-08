@@ -14,14 +14,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { domain, title, description, adminUser } = await request.json();
+    const { domain, track, title, description, adminUser } = await request.json();
 
-    if (!domain || !title || !description || !adminUser) {
+    if (!domain || !track || !title || !description || !adminUser) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
     const statement = await prisma.problemStatement.create({
-      data: { domain, title, description }
+      data: { domain, track, title, description }
     });
 
     await prisma.auditLog.create({

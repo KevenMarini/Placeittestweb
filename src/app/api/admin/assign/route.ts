@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
-    const { teamId, domain, statementId, statementTitle, isLocked, adminUser } = await request.json();
+    const { teamId, domain, statementId, statementTitle, statementTrack, isLocked, adminUser } = await request.json();
 
     if (!teamId || !adminUser) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -15,6 +15,7 @@ export async function POST(request: Request) {
         domain,
         statementId,
         statementTitle,
+        statementTrack,
         isLocked
       }
     });
