@@ -77,3 +77,14 @@ model ProblemStatement {
   
   createdAt   DateTime @default(now())
 }
+
+model ContactLink {
+  id        String   @id @default(cuid())
+  label     String          // e.g. "WhatsApp", "Email"
+  icon      String?         // emoji, e.g. "💬"
+  link      String?         // full URL or mailto: or just text
+  sortOrder Int      @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

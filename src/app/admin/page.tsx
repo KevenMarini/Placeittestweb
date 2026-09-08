@@ -28,6 +28,13 @@ export default function AdminPage() {
   const [newPSChallenge, setNewPSChallenge] = useState("");
   const [newPSDesc, setNewPSDesc] = useState("");
 
+  // Contact Links
+  const [contactLinks, setContactLinks] = useState<any[]>([]);
+  const [newContactLabel, setNewContactLabel] = useState("");
+  const [newContactIcon, setNewContactIcon] = useState("");
+  const [newContactLink, setNewContactLink] = useState("");
+  const [editingContact, setEditingContact] = useState<any | null>(null);
+
   // Teams tab state mapping for cascading dropdowns (teamId -> selectedDomain)
   const [teamSelectedDomains, setTeamSelectedDomains] = useState<Record<string, string>>({});
 
@@ -58,12 +65,14 @@ export default function AdminPage() {
       fetch("/api/admin/users").then(res => res.json()),
       fetch("/api/admin/teams").then(res => res.json()),
       fetch("/api/admin/announcements").then(res => res.json()),
-      fetch("/api/admin/statements").then(res => res.json())
-    ]).then(([usersData, teamsData, annData, stmtsData]) => {
+      fetch("/api/admin/statements").then(res => res.json()),
+      fetch("/api/admin/contact").then(res => res.json()),
+    ]).then(([usersData, teamsData, annData, stmtsData, contactData]) => {
       if (usersData.success) setUsers(usersData.users);
       if (teamsData.success) setTeams(teamsData.teams);
       if (annData.success) setAnnouncements(annData.announcements);
       if (stmtsData.success) setStatements(stmtsData.statements);
+      if (contactData.success) setContactLinks(contactData.links);
     });
 
     if (currentUser.role === "main_admin") {
@@ -71,6 +80,38 @@ export default function AdminPage() {
       fetch("/api/admin/logs").then(res => res.json()).then(data => { if(data.success) setLogs(data.logs); });
     }
   };
+
+  const addContactLink = async () => {
+    if (!newContactLabel) return;
+    await fetch("/api/admin/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ label: newContactLabel, icon: newContactIcon, link: newContactLink, sortOrder: contactLinks.length, adminUser: admin.username })
+    });
+    setNewContactLabel(""); setNewContactIcon(""); setNewContactLink("");
+    fetchData(admin);
+  };
+
+  const updateContactLink = async (item: any) => {
+    await fetch("/api/admin/contact", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...item, adminUser: admin.username })
+    });
+    setEditingContact(null);
+    fetchData(admin);
+  };
+
+  const deleteContactLink = async (id: string) => {
+    if (!confirm("Delete this contact entry?")) return;
+    await fetch("/api/admin/contact", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, adminUser: admin.username })
+    });
+    fetchData(admin);
+  };
+
 
   const postAnnouncement = async () => {
     if (!newAnnouncement) return;
@@ -183,6 +224,7 @@ export default function AdminPage() {
     { id: "teams", label: "Teams" },
     { id: "domains", label: "Domains" },
     { id: "announcements", label: "Announcements" },
+    { id: "contact", label: "Contact Page" },
     ...(admin.role === "main_admin" ? [
       { id: "subadmins", label: "Sub-Admins" },
       { id: "logs", label: "Logs" }
@@ -539,6 +581,74 @@ export default function AdminPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "contact" && (
+          <div className="bg-paper p-6 shadow-md wobbly-border border-4 border-ink">
+            <h2 className="font-marker text-3xl mb-6 text-neon-mint">Manage Contact Page</h2>
+
+            {/* Add new entry */}
+            <div className="bg-kraft p-6 mb-8 border-2 border-ink border-dashed">
+              <h3 className="font-marker text-xl mb-4 text-ink">Add New Entry</h3>
+              <div className="flex flex-wrap gap-4 items-end">
+                <div className="w-16">
+                  <label className="block font-bold text-xs text-ink mb-1">Icon (emoji)</label>
+                  <input type="text" value={newContactIcon} onChange={e => setNewContactIcon(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper text-center text-xl" placeholder="💬" />
+                </div>
+                <div className="flex-1 min-w-[140px]">
+                  <label className="block font-bold text-xs text-ink mb-1">Label / ID</label>
+                  <input type="text" value={newContactLabel} onChange={e => setNewContactLabel(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="e.g. WhatsApp" />
+                </div>
+                <div className="flex-[2] min-w-[200px]">
+                  <label className="block font-bold text-xs text-ink mb-1">Link / URL / Text</label>
+                  <input type="text" value={newContactLink} onChange={e => setNewContactLink(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="https://... or mailto:... or plain text" />
+                </div>
+                <button onClick={addContactLink} className="bg-neon-pink text-white font-bold px-6 py-2 border-2 border-ink hover:bg-neon-yellow hover:text-ink shadow-[4px_4px_0px_rgba(26,26,26,1)]">
+                  Add
+                </button>
+              </div>
+            </div>
+
+            {/* Existing entries */}
+            <div className="space-y-3">
+              {contactLinks.length === 0 && (
+                <p className="font-sans text-ink-light italic text-center py-8">No contact entries yet. Add one above!</p>
+              )}
+              {contactLinks.map(item => (
+                <div key={item.id} className="border-2 border-ink p-4 bg-canvas">
+                  {editingContact?.id === item.id ? (
+                    <div className="flex flex-wrap gap-3 items-end">
+                      <div className="w-16">
+                        <input type="text" value={editingContact.icon} onChange={e => setEditingContact({...editingContact, icon: e.target.value})} className="w-full border-2 border-ink p-2 text-ink bg-paper text-center text-xl" />
+                      </div>
+                      <div className="flex-1 min-w-[140px]">
+                        <input type="text" value={editingContact.label} onChange={e => setEditingContact({...editingContact, label: e.target.value})} className="w-full border-2 border-ink p-2 text-ink bg-paper" />
+                      </div>
+                      <div className="flex-[2] min-w-[200px]">
+                        <input type="text" value={editingContact.link} onChange={e => setEditingContact({...editingContact, link: e.target.value})} className="w-full border-2 border-ink p-2 text-ink bg-paper" />
+                      </div>
+                      <button onClick={() => updateContactLink(editingContact)} className="bg-neon-cyan text-ink font-bold px-4 py-2 border-2 border-ink hover:bg-neon-mint">Save</button>
+                      <button onClick={() => setEditingContact(null)} className="bg-paper text-ink font-bold px-4 py-2 border-2 border-ink hover:bg-neon-yellow">Cancel</button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{item.icon}</span>
+                        <div>
+                          <p className="font-bold text-ink">{item.label}</p>
+                          <p className="font-mono text-sm text-ink-light break-all">{item.link || "—"}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button onClick={() => setEditingContact({...item})} className="text-sm bg-neon-yellow text-ink px-3 py-1 border-2 border-ink font-bold hover:bg-neon-cyan">Edit</button>
+                        <button onClick={() => deleteContactLink(item.id)} className="text-sm bg-red-100 text-red-600 px-3 py-1 rounded border border-red-300 hover:bg-red-200 font-bold">Delete</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         )}
