@@ -17,8 +17,8 @@ export async function POST(request: Request) {
   try {
     const { domain, track, title, problem, challenge, description, adminUser } = await request.json();
 
-    if (!domain || !track || !title || !problem || !challenge || !adminUser) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    if (!domain || !track || !title || !adminUser) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     const statement = await prisma.problemStatement.create({

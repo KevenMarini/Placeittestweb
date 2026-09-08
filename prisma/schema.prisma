@@ -71,8 +71,8 @@ model ProblemStatement {
   domain      String
   track       String
   title       String
-  problem     String
-  challenge   String
+  problem     String?
+  challenge   String?
   description String?
   
   createdAt   DateTime @default(now())
