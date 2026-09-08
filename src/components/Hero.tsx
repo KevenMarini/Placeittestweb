@@ -80,9 +80,7 @@ export default function Hero() {
           </div>
           
           <h1 className="font-marker text-7xl md:text-9xl text-ink leading-none">
-            PlaceIT
-            <br />
-            <span className="text-5xl md:text-7xl text-ink-light">5.0</span>
+            PlaceIT <span className="text-5xl md:text-7xl text-ink-light ml-2">5.0</span>
           </h1>
 
           {/* Countdown Timer */}
