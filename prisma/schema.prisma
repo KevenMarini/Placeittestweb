@@ -64,3 +64,12 @@ model AuditLog {
   
   createdAt DateTime @default(now())
 }
+
+model ProblemStatement {
+  id          String   @id @default(cuid())
+  domain      String
+  title       String
+  description String
+  
+  createdAt   DateTime @default(now())
+}

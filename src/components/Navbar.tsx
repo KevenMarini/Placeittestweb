@@ -2,9 +2,38 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    const initialColorValue = root.classList.contains('dark') ? 'dark' : 'light';
+    const stored = window.localStorage.getItem('theme');
+    
+    if (stored === 'dark' || (!stored && initialColorValue === 'dark')) {
+      setIsDark(true);
+      root.classList.add('dark');
+    } else {
+      setIsDark(false);
+      root.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const root = window.document.documentElement;
+    if (isDark) {
+      root.classList.remove('dark');
+      window.localStorage.setItem('theme', 'light');
+      setIsDark(false);
+    } else {
+      root.classList.add('dark');
+      window.localStorage.setItem('theme', 'dark');
+      setIsDark(true);
+    }
+  };
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -45,6 +74,15 @@ export default function Navbar() {
 
         {/* Right Side */}
         <div className="flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center w-10 h-10 bg-white border-2 border-ink rounded-full shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:bg-neon-mint hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-all -translate-y-1 hover:-translate-y-2 group text-ink"
+            title="Toggle Dark Mode"
+          >
+            <span className="text-xl group-hover:scale-110 transition-transform">
+              {isDark ? "🌙" : "☀️"}
+            </span>
+          </button>
           <Link
             href="/announcements"
             className="flex items-center justify-center w-10 h-10 bg-white border-2 border-ink rounded-full shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:bg-neon-yellow hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-all -translate-y-1 hover:-translate-y-2 group"

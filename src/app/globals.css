@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-canvas: #F7F5F0;
-  --color-kraft: #D9C5A0;
-  --color-kraft-dark: #C4AE87;
-  --color-neon-yellow: #FFE66D;
-  --color-neon-pink: #FF6B6B;
-  --color-neon-mint: #4ECDC4;
-  --color-neon-cyan: #70D6FF;
-  --color-ink: #1A1A1A;
-  --color-ink-light: #4A4A4A;
+  --color-canvas: var(--theme-canvas);
+  --color-kraft: var(--theme-kraft);
+  --color-kraft-dark: var(--theme-kraft-dark);
+  --color-neon-yellow: var(--theme-neon-yellow);
+  --color-neon-pink: var(--theme-neon-pink);
+  --color-neon-mint: var(--theme-neon-mint);
+  --color-neon-cyan: var(--theme-neon-cyan);
+  --color-ink: var(--theme-ink);
+  --color-ink-light: var(--theme-ink-light);
   
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
@@ -17,11 +17,36 @@
 }
 
 @layer base {
+  :root {
+    --theme-canvas: #F7F5F0;
+    --theme-kraft: #D9C5A0;
+    --theme-kraft-dark: #C4AE87;
+    --theme-neon-yellow: #FFE66D;
+    --theme-neon-pink: #FF6B6B;
+    --theme-neon-mint: #4ECDC4;
+    --theme-neon-cyan: #70D6FF;
+    --theme-ink: #1A1A1A;
+    --theme-ink-light: #4A4A4A;
+  }
+
+  .dark {
+    --theme-canvas: #1A1A1A;
+    --theme-kraft: #332F2A;
+    --theme-kraft-dark: #26231F;
+    --theme-neon-yellow: #FFE66D;
+    --theme-neon-pink: #FF6B6B;
+    --theme-neon-mint: #4ECDC4;
+    --theme-neon-cyan: #70D6FF;
+    --theme-ink: #F7F5F0;
+    --theme-ink-light: #A0A0A0;
+  }
+
   body {
-    background-color: var(--color-canvas);
-    background-image: radial-gradient(var(--color-kraft) 1px, transparent 1px);
+    background-color: var(--theme-canvas);
+    background-image: radial-gradient(var(--theme-kraft) 1px, transparent 1px);
     background-size: 20px 20px;
-    color: var(--color-ink);
+    color: var(--theme-ink);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
