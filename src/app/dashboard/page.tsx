@@ -122,7 +122,7 @@ export default function Dashboard() {
 
         {!team ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-            <div className="bg-white p-8 relative shadow-lg wobbly-border-alt">
+            <div className="bg-paper p-8 relative shadow-lg wobbly-border-alt">
               <div className="tape -top-3 left-1/2 -translate-x-1/2 rotate-1"></div>
               <h2 className="font-marker text-3xl text-ink mb-2">Make a Team</h2>
               <p className="font-sans text-ink-light mb-6">Become the Team Captain</p>
@@ -153,7 +153,7 @@ export default function Dashboard() {
                   required
                   value={joinTeamCode}
                   onChange={(e) => setJoinTeamCode(e.target.value)}
-                  className="w-full bg-white border-2 border-ink text-ink font-mono text-lg p-3 mb-6 focus:outline-none focus:border-neon-cyan uppercase"
+                  className="w-full bg-paper border-2 border-ink text-ink font-mono text-lg p-3 mb-6 focus:outline-none focus:border-neon-cyan uppercase"
                 />
                 <button type="submit" className="w-full bg-neon-cyan text-ink font-marker text-2xl py-3 wobbly-border hover:bg-neon-pink transition-colors shadow-[2px_2px_0px_rgba(26,26,26,1)]">
                   Join Team
@@ -165,7 +165,7 @@ export default function Dashboard() {
           <div className="space-y-12">
             
             {/* Team Index Card */}
-            <div className="bg-white p-8 border-t-[20px] border-neon-pink shadow-md relative w-fit mx-auto min-w-[300px] rotate-1">
+            <div className="bg-paper p-8 border-t-[20px] border-neon-pink shadow-md relative w-fit mx-auto min-w-[300px] rotate-1">
               <div className="absolute top-[-15px] left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-canvas border-2 border-ink flex items-center justify-center">
                 <div className="w-3 h-3 bg-ink rounded-full" />
               </div>
@@ -201,7 +201,7 @@ export default function Dashboard() {
 
             {/* Bidding & Domains Flow */}
             {isTeamLocked ? (
-              <div className="mt-16 bg-white p-8 shadow-xl wobbly-border-alt border-4 border-neon-cyan relative max-w-2xl mx-auto">
+              <div className="mt-16 bg-paper p-8 shadow-xl wobbly-border-alt border-4 border-neon-cyan relative max-w-2xl mx-auto">
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-neon-cyan text-ink font-marker text-3xl px-8 py-2 wobbly-border rotate-2 whitespace-nowrap">
                   ASSIGNED BLUEPRINT
                 </div>
@@ -215,7 +215,7 @@ export default function Dashboard() {
                 <h2 className="font-marker text-5xl font-bold text-ink inline-block bg-neon-yellow px-6 py-2 wobbly-border shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-2">
                   IT'S TIME FOR BIDDING!
                 </h2>
-                <p className="font-sans text-lg text-ink-light mt-4 bg-white/50 inline-block px-4 py-2 wobbly-border-alt mb-8">
+                <p className="font-sans text-lg text-ink-light mt-4 bg-paper/50 inline-block px-4 py-2 wobbly-border-alt mb-8">
                   Review the problem statements below. Admins will assign the final blueprints.
                 </p>
                 <div>
@@ -249,7 +249,7 @@ export default function Dashboard() {
                       className={`font-marker text-xl px-4 py-2 transition-transform hover:-translate-y-1 sticky-note ${
                         selectedDomain === d.id 
                         ? "bg-neon-yellow scale-110 z-10" 
-                        : "bg-white text-ink-light"
+                        : "bg-paper text-ink-light"
                       }`}
                       style={{ transform: `rotate(${i % 2 === 0 ? 2 : -2}deg)` }}
                     >
@@ -261,7 +261,7 @@ export default function Dashboard() {
                 {/* Problem Statements List */}
                 {selectedDomain && (
                   <div className="space-y-6">
-                    <h3 className="font-marker text-3xl text-ink bg-white inline-block px-4 py-1 wobbly-border-alt -rotate-1 shadow-sm">
+                    <h3 className="font-marker text-3xl text-ink bg-paper inline-block px-4 py-1 wobbly-border-alt -rotate-1 shadow-sm">
                       Blueprints for {domains.find(d=>d.id === selectedDomain)?.name}
                     </h3>
                     
@@ -347,7 +347,7 @@ export default function Dashboard() {
                   </div>
                 )}
                 
-                <div className="border-l-4 border-neon-cyan pl-4 py-2 bg-white/50">
+                <div className="border-l-4 border-neon-cyan pl-4 py-2 bg-paper/50">
                   <h3 className="font-marker text-2xl bg-neon-cyan/30 inline-block px-2 mb-2 rotate-1">Your Challenge:</h3>
                   <p className="leading-relaxed font-bold italic">{selectedStatement.challenge}</p>
                 </div>

@@ -2,6 +2,7 @@
 
 @theme {
   --color-canvas: var(--theme-canvas);
+  --color-paper: var(--theme-paper);
   --color-kraft: var(--theme-kraft);
   --color-kraft-dark: var(--theme-kraft-dark);
   --color-neon-yellow: var(--theme-neon-yellow);
@@ -19,6 +20,7 @@
 @layer base {
   :root {
     --theme-canvas: #F7F5F0;
+    --theme-paper: #FFFFFF;
     --theme-kraft: #D9C5A0;
     --theme-kraft-dark: #C4AE87;
     --theme-neon-yellow: #FFE66D;
@@ -30,9 +32,10 @@
   }
 
   .dark {
-    --theme-canvas: #1A1A1A;
-    --theme-kraft: #332F2A;
-    --theme-kraft-dark: #26231F;
+    --theme-canvas: #121212;
+    --theme-paper: #242424;
+    --theme-kraft: #2D2A26;
+    --theme-kraft-dark: #1E1C19;
     --theme-neon-yellow: #FFE66D;
     --theme-neon-pink: #FF6B6B;
     --theme-neon-mint: #4ECDC4;
@@ -83,10 +86,10 @@
   }
 
   .polaroid {
-    background: white;
+    background: var(--theme-paper);
     padding: 10px 10px 40px 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--theme-kraft-dark);
   }
 
   .marker-text {

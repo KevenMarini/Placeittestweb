@@ -66,7 +66,7 @@ export default function Register() {
         
         {/* FRONT FACE: GUIDELINES */}
         <div 
-          className="absolute inset-0 bg-white p-8 shadow-xl backface-hidden flex flex-col" 
+          className="absolute inset-0 bg-paper p-8 shadow-xl backface-hidden flex flex-col" 
           style={{ borderLeft: "4px dashed #D9C5A0" }}
         >
           {/* Tear stub */}
@@ -102,7 +102,7 @@ export default function Register() {
 
         {/* BACK FACE: FORM */}
         <div 
-          className="absolute inset-0 bg-white p-8 shadow-xl backface-hidden flex flex-col" 
+          className="absolute inset-0 bg-paper p-8 shadow-xl backface-hidden flex flex-col" 
           style={{ transform: "rotateY(180deg)", borderRight: "4px dashed #D9C5A0" }}
         >
           {/* Tear stub on the "right" side since it's flipped */}
@@ -198,9 +198,9 @@ export default function Register() {
               <motion.div
                 initial={{ opacity: 0, scale: 3, rotate: -20 }}
                 animate={{ opacity: 1, scale: 1, rotate: -10 }}
-                className="absolute inset-0 flex items-center justify-center pointer-events-none z-50 bg-white/50 backdrop-blur-[1px] rounded-sm"
+                className="absolute inset-0 flex items-center justify-center pointer-events-none z-50 bg-paper/50 backdrop-blur-[1px] rounded-sm"
               >
-                <div className="border-4 border-neon-pink text-neon-pink font-marker text-5xl p-4 rotate-12 bg-white shadow-xl opacity-90 mix-blend-multiply">
+                <div className="border-4 border-neon-pink text-neon-pink font-marker text-5xl p-4 rotate-12 bg-paper shadow-xl opacity-90 mix-blend-multiply">
                   APPROVED
                 </div>
               </motion.div>

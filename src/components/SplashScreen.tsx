@@ -40,7 +40,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
               backgroundSize: "20px 20px"
             }}
           >
-            <div className="relative wobbly-border bg-white p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col items-center -rotate-2 max-w-sm text-center">
+            <div className="relative wobbly-border bg-paper p-8 md:p-12 shadow-[8px_8px_0px_rgba(26,26,26,1)] flex flex-col items-center -rotate-2 max-w-sm text-center">
               <div className="tape -top-4 left-1/2 -translate-x-1/2 rotate-3"></div>
               
               <Image 

@@ -37,7 +37,7 @@ export default function Guidelines() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-50px" }}
-          className="relative bg-white p-8 md:p-12 shadow-md rotate-1"
+          className="relative bg-paper p-8 md:p-12 shadow-md rotate-1"
         >
           {/* Notebook holes */}
           <div className="absolute left-4 top-0 bottom-0 w-8 border-r-2 border-neon-pink flex flex-col justify-evenly">

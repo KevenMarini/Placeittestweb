@@ -85,28 +85,28 @@ export default function Hero() {
 
           {/* Countdown Timer */}
           <div className="flex gap-4 font-mono font-bold text-2xl text-ink mt-2">
-            <div className="flex flex-col items-center bg-white p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] rotate-1">
+            <div className="flex flex-col items-center bg-paper p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] rotate-1">
               <span className="text-neon-pink text-4xl">{String(timeLeft.days).padStart(2, '0')}</span>
               <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Days</span>
             </div>
             <span className="self-center text-4xl">:</span>
-            <div className="flex flex-col items-center bg-white p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-2">
+            <div className="flex flex-col items-center bg-paper p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-2">
               <span className="text-neon-cyan text-4xl">{String(timeLeft.hours).padStart(2, '0')}</span>
               <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Hrs</span>
             </div>
             <span className="self-center text-4xl">:</span>
-            <div className="flex flex-col items-center bg-white p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] rotate-3">
+            <div className="flex flex-col items-center bg-paper p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] rotate-3">
               <span className="text-neon-mint text-4xl">{String(timeLeft.minutes).padStart(2, '0')}</span>
               <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Mins</span>
             </div>
             <span className="self-center text-4xl">:</span>
-            <div className="flex flex-col items-center bg-white p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-1">
+            <div className="flex flex-col items-center bg-paper p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-1">
               <span className="text-neon-yellow text-4xl">{String(timeLeft.seconds).padStart(2, '0')}</span>
               <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Secs</span>
             </div>
           </div>
           
-          <p className="font-sans text-xl text-ink-light max-w-lg font-medium bg-white/50 p-4 wobbly-border-alt mt-2">
+          <p className="font-sans text-xl text-ink-light max-w-lg font-medium bg-paper/50 p-4 wobbly-border-alt mt-2">
             Grab a marker. Join a team. Build tangible prototypes from raw concepts in our ultimate whiteboard session.
           </p>
 
@@ -118,7 +118,7 @@ export default function Hero() {
               value={newStickyText}
               onChange={(e) => setNewStickyText(e.target.value)}
               placeholder="What's on your mind?..."
-              className="w-full bg-white p-3 font-marker text-xl text-ink resize-none h-24 border-2 border-ink focus:outline-none focus:border-neon-pink shadow-[2px_2px_0px_rgba(26,26,26,1)]"
+              className="w-full bg-paper p-3 font-marker text-xl text-ink resize-none h-24 border-2 border-ink focus:outline-none focus:border-neon-pink shadow-[2px_2px_0px_rgba(26,26,26,1)]"
             />
             <div className="flex justify-between items-center mt-4">
               <div className="flex gap-2">
@@ -138,7 +138,7 @@ export default function Hero() {
         </div>
 
         {/* Right: Interactive Draggable Board */}
-        <div className="relative h-[600px] w-full border-4 border-kraft-dark bg-white shadow-xl rounded-sm">
+        <div className="relative h-[600px] w-full border-4 border-kraft-dark bg-paper shadow-xl rounded-sm">
           {/* Corkboard texture overlay */}
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
           
@@ -156,8 +156,8 @@ export default function Hero() {
               initial={{ x: sticky.x, y: sticky.y, rotate: sticky.rotate }}
               className={`absolute w-40 h-40 ${sticky.color} p-4 cursor-grab active:cursor-grabbing border border-ink/10 flex items-center justify-center text-center shadow-lg hover:shadow-xl transition-shadow`}
             >
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-3 bg-white/40 shadow-sm border border-white/50 -translate-y-1 rotate-1 backdrop-blur-sm"></div>
-              <p className="font-marker text-2xl text-ink leading-tight select-none">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-3 bg-paper/40 shadow-sm border border-white/50 -translate-y-1 rotate-1 backdrop-blur-sm"></div>
+              <p className="font-marker text-2xl text-[#1A1A1A] leading-tight select-none">
                 {sticky.text}
               </p>
             </motion.div>

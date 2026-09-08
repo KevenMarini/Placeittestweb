@@ -127,7 +127,7 @@ export default function Timeline() {
               >
                 {/* Pin */}
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-neon-cyan shadow-sm border border-ink/50 z-10">
-                  <div className="absolute inset-1 rounded-full bg-white/40"></div>
+                  <div className="absolute inset-1 rounded-full bg-paper/40"></div>
                 </div>
 
                 <div className={`font-mono text-xs mb-2 px-2 py-1 inline-block border-2 border-ink ${item.isBreak ? 'bg-neon-yellow' : 'bg-neon-mint'}`}>

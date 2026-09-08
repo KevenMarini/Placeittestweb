@@ -173,7 +173,7 @@ export default function AdminPage() {
               key={t.id}
               onClick={() => setActiveTab(t.id)}
               className={`font-marker text-2xl px-6 py-2 border-2 border-ink shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-transform ${
-                activeTab === t.id ? "bg-neon-pink text-white -translate-y-1" : "bg-white text-ink hover:bg-neon-yellow"
+                activeTab === t.id ? "bg-neon-pink text-white -translate-y-1" : "bg-paper text-ink hover:bg-neon-yellow"
               }`}
             >
               {t.label}
@@ -182,7 +182,7 @@ export default function AdminPage() {
         </div>
 
         {activeTab === "participants" && (
-          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-white">
+          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-paper">
             <h2 className="font-marker text-3xl mb-4 text-ink">All Participants ({users.length})</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-left font-sans border-collapse">
@@ -210,22 +210,22 @@ export default function AdminPage() {
         )}
 
         {activeTab === "blueprints" && (
-          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-white">
+          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-paper">
             <h2 className="font-marker text-3xl mb-4 text-neon-cyan">Manage Problem Statements</h2>
             <div className="bg-kraft p-4 mb-8 border-2 border-ink border-dashed">
               <h3 className="font-marker text-xl mb-4 text-ink">Add New Blueprint</h3>
               <div className="flex flex-wrap gap-4 items-end">
                 <div className="flex-1 min-w-[200px]">
                   <label className="block font-bold text-xs text-ink">Domain</label>
-                  <input type="text" value={newPSDomain} onChange={(e)=>setNewPSDomain(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-white" placeholder="e.g. HealthCare" />
+                  <input type="text" value={newPSDomain} onChange={(e)=>setNewPSDomain(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="e.g. HealthCare" />
                 </div>
                 <div className="flex-[2] min-w-[200px]">
                   <label className="block font-bold text-xs text-ink">Statement Title</label>
-                  <input type="text" value={newPSTitle} onChange={(e)=>setNewPSTitle(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-white" placeholder="e.g. AI Med Diagnosis" />
+                  <input type="text" value={newPSTitle} onChange={(e)=>setNewPSTitle(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="e.g. AI Med Diagnosis" />
                 </div>
                 <div className="flex-[2] min-w-[200px]">
                   <label className="block font-bold text-xs text-ink">Description (optional)</label>
-                  <input type="text" value={newPSDesc} onChange={(e)=>setNewPSDesc(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-white" placeholder="Details..." />
+                  <input type="text" value={newPSDesc} onChange={(e)=>setNewPSDesc(e.target.value)} className="w-full border-2 border-ink p-2 text-ink bg-paper" placeholder="Details..." />
                 </div>
                 <button onClick={addStatement} className="bg-neon-pink text-white font-bold px-6 py-2 border-2 border-ink hover:bg-neon-yellow hover:text-ink">Add</button>
               </div>
@@ -251,7 +251,7 @@ export default function AdminPage() {
           <div className="space-y-6">
             <h2 className="font-marker text-3xl text-neon-mint">Teams & Assignments</h2>
             {teams.map(team => (
-              <div key={team.id} className="bg-canvas p-6 shadow-md wobbly-border relative border-4 border-kraft bg-white">
+              <div key={team.id} className="bg-canvas p-6 shadow-md wobbly-border relative border-4 border-kraft bg-paper">
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="font-marker text-2xl text-ink">{team.name}</h3>
@@ -271,7 +271,7 @@ export default function AdminPage() {
                     ))}
                   </ul>
                   <div className="mt-4 flex items-center gap-2">
-                    <input type="text" id={`addreg-${team.id}`} placeholder="VIT Reg No" className="border-2 border-ink p-1 text-sm text-ink w-32 bg-white" />
+                    <input type="text" id={`addreg-${team.id}`} placeholder="VIT Reg No" className="border-2 border-ink p-1 text-sm text-ink w-32 bg-paper" />
                     <button onClick={() => addMemberToTeam(team.id, `addreg-${team.id}`)} className="bg-neon-cyan text-ink text-sm px-3 py-1 font-bold border-2 border-ink hover:bg-neon-mint">Add Member</button>
                   </div>
                 </div>
@@ -281,7 +281,7 @@ export default function AdminPage() {
                   <div className="flex flex-wrap gap-4 items-end">
                     <div className="flex-1 min-w-[300px]">
                       <label className="block font-bold text-xs text-ink">Select Blueprint</label>
-                      <select id={`select-${team.id}`} defaultValue={team.statementId || ""} className="w-full border-2 border-ink p-2 text-ink bg-white">
+                      <select id={`select-${team.id}`} defaultValue={team.statementId || ""} className="w-full border-2 border-ink p-2 text-ink bg-paper">
                         <option value="">-- No Statement Assigned --</option>
                         {statements.map(s => (
                           <option key={s.id} value={s.id}>[{s.domain}] {s.title}</option>
@@ -310,12 +310,12 @@ export default function AdminPage() {
         )}
 
         {activeTab === "announcements" && (
-          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-white">
+          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-paper">
             <h2 className="font-marker text-3xl mb-4 text-neon-cyan">Post Announcement</h2>
             <textarea 
               value={newAnnouncement}
               onChange={(e) => setNewAnnouncement(e.target.value)}
-              className="w-full border-2 border-ink p-4 font-sans mb-4 h-32 text-ink bg-white"
+              className="w-full border-2 border-ink p-4 font-sans mb-4 h-32 text-ink bg-paper"
               placeholder="Type announcement here..."
             />
             <button onClick={postAnnouncement} className="bg-neon-yellow text-ink font-marker text-2xl px-6 py-2 border-2 border-ink shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:bg-neon-cyan transition-colors">
@@ -335,11 +335,11 @@ export default function AdminPage() {
         )}
 
         {activeTab === "subadmins" && admin.role === "main_admin" && (
-          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-white">
+          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-paper">
             <h2 className="font-marker text-3xl mb-4 text-ink">Manage Sub-Admins</h2>
             <div className="flex gap-4 mb-8">
-              <input type="text" value={newAdminUser} onChange={(e) => setNewAdminUser(e.target.value)} placeholder="Username" className="border-2 border-ink p-2 flex-1 text-ink bg-white" />
-              <input type="text" value={newAdminPass} onChange={(e) => setNewAdminPass(e.target.value)} placeholder="Password" className="border-2 border-ink p-2 flex-1 text-ink bg-white" />
+              <input type="text" value={newAdminUser} onChange={(e) => setNewAdminUser(e.target.value)} placeholder="Username" className="border-2 border-ink p-2 flex-1 text-ink bg-paper" />
+              <input type="text" value={newAdminPass} onChange={(e) => setNewAdminPass(e.target.value)} placeholder="Password" className="border-2 border-ink p-2 flex-1 text-ink bg-paper" />
               <button onClick={createSubAdmin} className="bg-ink text-canvas font-bold px-4 py-2 hover:bg-neon-yellow hover:text-ink">Create</button>
             </div>
 
@@ -359,7 +359,7 @@ export default function AdminPage() {
         )}
 
         {activeTab === "logs" && admin.role === "main_admin" && (
-          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-white">
+          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-paper">
             <h2 className="font-marker text-3xl mb-4 text-ink">System Logs</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-left font-sans text-xs text-ink">

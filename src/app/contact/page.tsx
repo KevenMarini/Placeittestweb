@@ -3,7 +3,7 @@ import { Mail, MapPin } from "lucide-react";
 export default function Contact() {
   return (
     <div className="min-h-[80vh] py-24 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-      <div className="max-w-2xl w-full bg-white p-8 md:p-12 shadow-xl relative rotate-1" style={{ backgroundImage: "linear-gradient(#e5e7eb 1px, transparent 1px)", backgroundSize: "100% 2rem", backgroundPosition: "0 1rem" }}>
+      <div className="max-w-2xl w-full bg-paper p-8 md:p-12 shadow-xl relative rotate-1" style={{ backgroundImage: "linear-gradient(#e5e7eb 1px, transparent 1px)", backgroundSize: "100% 2rem", backgroundPosition: "0 1rem" }}>
         
         {/* Paperclips */}
         <div className="absolute -top-4 left-1/4 w-4 h-12 border-2 border-ink rounded-full bg-slate-300 shadow-sm" />

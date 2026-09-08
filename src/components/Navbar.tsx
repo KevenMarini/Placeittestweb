@@ -43,7 +43,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 pt-4 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto flex justify-between items-center bg-white/80 backdrop-blur-sm p-3 wobbly-border shadow-[4px_4px_0px_rgba(26,26,26,0.2)]">
+      <div className="max-w-7xl mx-auto flex justify-between items-center bg-paper/80 backdrop-blur-sm p-3 wobbly-border shadow-[4px_4px_0px_rgba(26,26,26,0.2)]">
         
         {/* Tape decoration */}
         <div className="tape -top-2 left-10 rotate-3"></div>
@@ -76,7 +76,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <button
             onClick={toggleTheme}
-            className="flex items-center justify-center w-10 h-10 bg-white border-2 border-ink rounded-full shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:bg-neon-mint hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-all -translate-y-1 hover:-translate-y-2 group text-ink"
+            className="flex items-center justify-center w-10 h-10 bg-paper border-2 border-ink rounded-full shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:bg-neon-mint hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-all -translate-y-1 hover:-translate-y-2 group text-ink"
             title="Toggle Dark Mode"
           >
             <span className="text-xl group-hover:scale-110 transition-transform">
@@ -85,7 +85,7 @@ export default function Navbar() {
           </button>
           <Link
             href="/announcements"
-            className="flex items-center justify-center w-10 h-10 bg-white border-2 border-ink rounded-full shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:bg-neon-yellow hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-all -translate-y-1 hover:-translate-y-2 group"
+            className="flex items-center justify-center w-10 h-10 bg-paper border-2 border-ink rounded-full shadow-[2px_2px_0px_rgba(26,26,26,1)] hover:bg-neon-yellow hover:shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-all -translate-y-1 hover:-translate-y-2 group"
             title="Announcements"
           >
             <span className="text-xl group-hover:scale-110 transition-transform">📢</span>
