@@ -31,7 +31,13 @@ export default function AdminPage() {
       return;
     }
     setAdmin(user);
+    
+    // Initial fetch
     fetchData();
+    
+    // Live updates every 5 seconds
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchData = async () => {

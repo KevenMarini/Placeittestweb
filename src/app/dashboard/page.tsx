@@ -27,7 +27,7 @@ export default function Dashboard() {
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
   const [selectedStatement, setSelectedStatement] = useState<any | null>(null);
 
-  useEffect(() => {
+  const fetchState = () => {
     const userStr = localStorage.getItem("placeit_user");
     if (!userStr) {
       router.push("/register");
@@ -35,7 +35,6 @@ export default function Dashboard() {
     }
     const parsedUser = JSON.parse(userStr);
     
-    // Fetch fresh state
     fetch("/api/teams/me", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -45,9 +44,15 @@ export default function Dashboard() {
         setUser(data.user);
         setTeam(data.user.team);
       } else {
-        setUser(parsedUser); // fallback
+        setUser(parsedUser);
       }
     });
+  };
+
+  useEffect(() => {
+    fetchState();
+    const interval = setInterval(fetchState, 5000); // Live update every 5 seconds
+    return () => clearInterval(interval);
   }, [router]);
 
   const handleCreateTeam = async (e: React.FormEvent) => {
@@ -59,8 +64,10 @@ export default function Dashboard() {
       body: JSON.stringify({ regNo: user.regNo, teamName: createTeamName })
     });
     const data = await res.json();
-    if (data.success) window.location.reload();
-    else alert(data.error);
+    if (data.success) {
+      setCreateTeamName("");
+      fetchState();
+    } else alert(data.error);
   };
 
   const handleJoinTeam = async (e: React.FormEvent) => {
@@ -72,8 +79,10 @@ export default function Dashboard() {
       body: JSON.stringify({ regNo: user.regNo, code: joinTeamCode })
     });
     const data = await res.json();
-    if (data.success) window.location.reload();
-    else alert(data.error);
+    if (data.success) {
+      setJoinTeamCode("");
+      fetchState();
+    } else alert(data.error);
   };
 
   const handleConfirmTeam = async () => {
@@ -85,7 +94,7 @@ export default function Dashboard() {
     const data = await res.json();
     if (data.success) {
       alert("Team confirmed successfully!");
-      window.location.reload();
+      fetchState();
     } else alert(data.error);
   };
 

@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     if (formattedRegNo === "PLACEITADMIN" && password === "place5.0") {
       return NextResponse.json({
         success: true,
-        user: { regNo: "admin", username: "Admin", role: "main_admin" },
+        user: { regNo: "admin", username: "placeitadmin", role: "main_admin" },
       });
     }
 
