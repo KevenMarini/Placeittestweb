@@ -38,6 +38,10 @@ export default function AdminPage() {
   // Teams tab state mapping for cascading dropdowns (teamId -> selectedDomain)
   const [teamSelectedDomains, setTeamSelectedDomains] = useState<Record<string, string>>({});
 
+  // Inline editing
+  const [editingUser, setEditingUser] = useState<any | null>(null);
+  const [editingSubAdmin, setEditingSubAdmin] = useState<any | null>(null);
+
   useEffect(() => {
     const userStr = localStorage.getItem("placeit_user");
     if (!userStr) {
@@ -112,6 +116,44 @@ export default function AdminPage() {
     fetchData(admin);
   };
 
+
+  const updateUser = async (u: any) => {
+    const res = await fetch("/api/admin/users", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: u.id, username: u.username, password: u.password, adminUser: admin.username })
+    });
+    if ((await res.json()).success) { setEditingUser(null); fetchData(admin); }
+  };
+
+  const deleteUser = async (id: string, name: string) => {
+    if (!confirm(`Delete participant "${name}"? This cannot be undone.`)) return;
+    await fetch("/api/admin/users", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, adminUser: admin.username })
+    });
+    fetchData(admin);
+  };
+
+  const updateSubAdmin = async (s: any) => {
+    const res = await fetch("/api/admin/subadmins", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: s.id, username: s.username, password: s.password, mainAdminUser: admin.username })
+    });
+    if ((await res.json()).success) { setEditingSubAdmin(null); fetchData(admin); }
+  };
+
+  const deleteSubAdmin = async (id: string, username: string) => {
+    if (!confirm(`Delete sub-admin "${username}"?`)) return;
+    await fetch("/api/admin/subadmins", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, mainAdminUser: admin.username })
+    });
+    fetchData(admin);
+  };
 
   const postAnnouncement = async () => {
     if (!newAnnouncement) return;
@@ -300,18 +342,50 @@ export default function AdminPage() {
                 <thead>
                   <tr className="border-b-4 border-ink bg-neon-yellow text-ink">
                     <th className="p-3">Reg No</th>
-                    <th className="p-3">Name</th>
+                    <th className="p-3">Name (Alias)</th>
                     <th className="p-3">Passcode</th>
-                    <th className="p-3">Team Status</th>
+                    <th className="p-3">Team</th>
+                    <th className="p-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map(u => (
                     <tr key={u.id} className="border-b-2 border-ink border-dashed hover:bg-canvas/50">
                       <td className="p-3 font-bold text-ink">{u.regNo}</td>
-                      <td className="p-3 text-ink">{u.username}</td>
-                      <td className="p-3 font-mono text-red-600">{u.password}</td>
-                      <td className="p-3 text-ink">{u.team ? (u.isLeader ? `Leader of ${u.team.name}` : `Member of ${u.team.name}`) : "No Team"}</td>
+
+                      {editingUser?.id === u.id ? (
+                        <>
+                          <td className="p-2">
+                            <input
+                              className="border-2 border-ink p-1 text-ink bg-paper w-full text-sm"
+                              value={editingUser.username}
+                              onChange={e => setEditingUser({...editingUser, username: e.target.value})}
+                            />
+                          </td>
+                          <td className="p-2">
+                            <input
+                              className="border-2 border-ink p-1 text-ink bg-paper w-full font-mono text-sm"
+                              value={editingUser.password}
+                              onChange={e => setEditingUser({...editingUser, password: e.target.value})}
+                            />
+                          </td>
+                          <td className="p-2 text-ink text-sm">{u.team ? (u.isLeader ? `★ ${u.team.name}` : u.team.name) : "—"}</td>
+                          <td className="p-2 flex gap-2">
+                            <button onClick={() => updateUser(editingUser)} className="text-xs bg-neon-cyan text-ink font-bold px-3 py-1 border border-ink hover:bg-neon-mint">Save</button>
+                            <button onClick={() => setEditingUser(null)} className="text-xs bg-paper text-ink font-bold px-3 py-1 border border-ink hover:bg-neon-yellow">Cancel</button>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="p-3 text-ink">{u.username}</td>
+                          <td className="p-3 font-mono text-red-600">{u.password}</td>
+                          <td className="p-3 text-ink text-sm">{u.team ? (u.isLeader ? `★ ${u.team.name}` : u.team.name) : "No Team"}</td>
+                          <td className="p-3 flex gap-2">
+                            <button onClick={() => setEditingUser({...u})} className="text-xs bg-neon-yellow text-ink font-bold px-3 py-1 border border-ink hover:bg-neon-cyan">Edit</button>
+                            <button onClick={() => deleteUser(u.id, u.username)} className="text-xs bg-red-100 text-red-600 font-bold px-3 py-1 border border-red-300 hover:bg-red-200">Delete</button>
+                          </td>
+                        </>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -549,14 +623,51 @@ export default function AdminPage() {
               <button onClick={createSubAdmin} className="bg-ink text-canvas font-bold px-4 py-2 hover:bg-neon-yellow hover:text-ink">Create</button>
             </div>
 
-            <table className="w-full text-left font-sans text-ink">
-              <thead><tr className="border-b-2 border-ink"><th>Username</th><th>Password</th><th>Created At</th></tr></thead>
+            <table className="w-full text-left font-sans text-ink border-collapse">
+              <thead>
+                <tr className="border-b-4 border-ink bg-neon-cyan text-ink">
+                  <th className="p-3">Username</th>
+                  <th className="p-3">Password</th>
+                  <th className="p-3">Created At</th>
+                  <th className="p-3">Actions</th>
+                </tr>
+              </thead>
               <tbody>
                 {subAdmins.map(s => (
-                  <tr key={s.id} className="border-b border-ink/20">
-                    <td className="p-2 font-bold">{s.username}</td>
-                    <td className="p-2 font-mono text-red-600">{s.password}</td>
-                    <td className="p-2">{new Date(s.createdAt).toLocaleString()}</td>
+                  <tr key={s.id} className="border-b-2 border-ink border-dashed hover:bg-canvas/50">
+                    {editingSubAdmin?.id === s.id ? (
+                      <>
+                        <td className="p-2">
+                          <input
+                            className="border-2 border-ink p-1 text-ink bg-paper w-full text-sm"
+                            value={editingSubAdmin.username}
+                            onChange={e => setEditingSubAdmin({...editingSubAdmin, username: e.target.value})}
+                          />
+                        </td>
+                        <td className="p-2">
+                          <input
+                            className="border-2 border-ink p-1 text-ink bg-paper w-full font-mono text-sm"
+                            value={editingSubAdmin.password}
+                            onChange={e => setEditingSubAdmin({...editingSubAdmin, password: e.target.value})}
+                          />
+                        </td>
+                        <td className="p-2 text-xs text-ink-light">{new Date(s.createdAt).toLocaleString()}</td>
+                        <td className="p-2 flex gap-2">
+                          <button onClick={() => updateSubAdmin(editingSubAdmin)} className="text-xs bg-neon-cyan text-ink font-bold px-3 py-1 border border-ink hover:bg-neon-mint">Save</button>
+                          <button onClick={() => setEditingSubAdmin(null)} className="text-xs bg-paper text-ink font-bold px-3 py-1 border border-ink hover:bg-neon-yellow">Cancel</button>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="p-3 font-bold">{s.username}</td>
+                        <td className="p-3 font-mono text-red-600">{s.password}</td>
+                        <td className="p-3 text-xs text-ink-light">{new Date(s.createdAt).toLocaleString()}</td>
+                        <td className="p-3 flex gap-2">
+                          <button onClick={() => setEditingSubAdmin({...s})} className="text-xs bg-neon-yellow text-ink font-bold px-3 py-1 border border-ink hover:bg-neon-cyan">Edit</button>
+                          <button onClick={() => deleteSubAdmin(s.id, s.username)} className="text-xs bg-red-100 text-red-600 font-bold px-3 py-1 border border-red-300 hover:bg-red-200">Delete</button>
+                        </td>
+                      </>
+                    )}
                   </tr>
                 ))}
               </tbody>
