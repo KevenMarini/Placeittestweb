@@ -279,77 +279,85 @@ export default function Dashboard() {
                 </h2>
               </div>
 
-              {!presentationUnlocked ? (
-                <div className="bg-paper border-4 border-ink p-8 wobbly-border text-center shadow-[4px_4px_0px_rgba(26,26,26,1)]">
-                  <div className="text-6xl mb-4">🔒</div>
-                  <h3 className="font-marker text-3xl text-ink mb-2">Submissions Locked</h3>
-                  <p className="font-sans text-ink-light">Presentation submissions are not open yet. The admin will unlock this when it's time.</p>
-                </div>
-              ) : (
-                <div className="bg-paper border-4 border-neon-mint p-6 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] space-y-5">
-
-                  {/* Current submission */}
-                  {submittedLink && (
-                    <div className="bg-neon-mint/20 border-2 border-neon-mint p-4 flex items-center justify-between gap-4 flex-wrap">
-                      <div>
-                        <p className="font-bold font-sans text-ink text-sm uppercase mb-1">✅ Current Submission</p>
-                        <a href={submittedLink} target="_blank" rel="noopener noreferrer" className="font-mono text-sm text-neon-cyan underline break-all hover:text-neon-pink">
-                          {submittedLink}
-                        </a>
-                      </div>
-                      <span className="font-marker text-sm bg-neon-mint text-ink px-3 py-1 border border-ink">Submitted</span>
+              <div className={`bg-paper border-4 ${presentationUnlocked ? 'border-neon-mint wobbly-border-alt' : 'border-ink wobbly-border'} p-6 shadow-[4px_4px_0px_rgba(26,26,26,1)] space-y-5`}>
+                
+                {/* Always show Current submission if it exists */}
+                {submittedLink && (
+                  <div className={`border-2 p-4 flex items-center justify-between gap-4 flex-wrap ${presentationUnlocked ? 'bg-neon-mint/20 border-neon-mint' : 'bg-canvas/50 border-ink'}`}>
+                    <div>
+                      <p className="font-bold font-sans text-ink text-sm uppercase mb-1">
+                        {presentationUnlocked ? "✅ Current Submission" : "🔒 Final Submission"}
+                      </p>
+                      <a href={submittedLink} target="_blank" rel="noopener noreferrer" className="font-mono text-sm text-neon-cyan underline break-all hover:text-neon-pink">
+                        {submittedLink}
+                      </a>
                     </div>
-                  )}
-
-                  {/* Guidelines toggle */}
-                  <button
-                    onClick={() => setShowGuidelines(!showGuidelines)}
-                    className="font-marker text-lg text-neon-cyan underline decoration-wavy hover:text-neon-pink transition-colors"
-                  >
-                    {showGuidelines ? "▲ Hide Guidelines" : "▼ Read Before Uploading (Important!)"}
-                  </button>
-
-                  <AnimatePresence>
-                    {showGuidelines && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="bg-kraft/30 border-2 border-ink p-5 space-y-3 overflow-hidden"
-                      >
-                        <h4 className="font-marker text-xl text-ink mb-3">📋 Upload Guidelines</h4>
-                        {UPLOAD_GUIDELINES.map((g, i) => (
-                          <div key={i} className="flex items-start gap-3">
-                            <span className="text-xl flex-shrink-0">{g.icon}</span>
-                            <p className="font-sans text-sm text-ink leading-relaxed">{g.rule}</p>
-                          </div>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Link input */}
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <input
-                      type="url"
-                      value={presentationLink}
-                      onChange={e => setPresentationLink(e.target.value)}
-                      className="flex-1 border-2 border-ink p-3 font-mono text-sm text-ink bg-paper focus:outline-none focus:border-neon-mint"
-                      placeholder="Paste your Google Drive share link here..."
-                    />
-                    <button
-                      onClick={handleSubmitPresentation}
-                      disabled={submitting || !presentationLink.trim()}
-                      className="bg-neon-mint text-ink font-marker text-xl px-6 py-3 border-2 border-ink shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:bg-neon-yellow hover:shadow-[6px_6px_0px_rgba(26,26,26,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                    >
-                      {submitting ? "Submitting..." : submittedLink ? "Update Link" : "Submit →"}
-                    </button>
+                    <span className={`font-marker text-sm text-ink px-3 py-1 border border-ink ${presentationUnlocked ? 'bg-neon-mint' : 'bg-paper'}`}>
+                      {presentationUnlocked ? "Submitted" : "Locked"}
+                    </span>
                   </div>
-                  <p className="font-sans text-xs text-ink-light">
-                    🔓 Submissions are open. You can update your link at any time while it remains unlocked.
-                  </p>
-                </div>
-              )}
+                )}
+
+                {!presentationUnlocked ? (
+                  <div className="bg-paper/50 border-2 border-ink border-dashed p-6 text-center mt-4">
+                    <div className="text-4xl mb-3">🔒</div>
+                    <h3 className="font-marker text-2xl text-ink mb-1">Submissions Locked</h3>
+                    <p className="font-sans text-sm text-ink-light">
+                      {submittedLink ? "Your presentation is locked in and cannot be changed." : "Presentation submissions are currently closed."}
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Guidelines toggle */}
+                    <button
+                      onClick={() => setShowGuidelines(!showGuidelines)}
+                      className="font-marker text-lg text-neon-cyan underline decoration-wavy hover:text-neon-pink transition-colors"
+                    >
+                      {showGuidelines ? "▲ Hide Guidelines" : "▼ Read Before Uploading (Important!)"}
+                    </button>
+
+                    <AnimatePresence>
+                      {showGuidelines && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="bg-kraft/30 border-2 border-ink p-5 space-y-3 overflow-hidden"
+                        >
+                          <h4 className="font-marker text-xl text-ink mb-3">📋 Upload Guidelines</h4>
+                          {UPLOAD_GUIDELINES.map((g, i) => (
+                            <div key={i} className="flex items-start gap-3">
+                              <span className="text-xl flex-shrink-0">{g.icon}</span>
+                              <p className="font-sans text-sm text-ink leading-relaxed">{g.rule}</p>
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Link input */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="url"
+                        value={presentationLink}
+                        onChange={e => setPresentationLink(e.target.value)}
+                        className="flex-1 border-2 border-ink p-3 font-mono text-sm text-ink bg-paper focus:outline-none focus:border-neon-mint"
+                        placeholder="Paste your Google Drive share link here..."
+                      />
+                      <button
+                        onClick={handleSubmitPresentation}
+                        disabled={submitting || !presentationLink.trim()}
+                        className="bg-neon-mint text-ink font-marker text-xl px-6 py-3 border-2 border-ink shadow-[4px_4px_0px_rgba(26,26,26,1)] hover:bg-neon-yellow hover:shadow-[6px_6px_0px_rgba(26,26,26,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                      >
+                        {submitting ? "Submitting..." : submittedLink ? "Update Link" : "Submit →"}
+                      </button>
+                    </div>
+                    <p className="font-sans text-xs text-ink-light">
+                      🔓 Submissions are open. You can update your link at any time while it remains unlocked.
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* ── Power-Ups ── */}
