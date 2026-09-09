@@ -1,147 +1,196 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 
-const timelineData = [
-  { phase: "Day 1", title: "Launch & Keynote", time: "09:00 AM", desc: "Event kickoff & problem statements." },
-  { phase: "Day 1", title: "Masterclass", time: "10:00 AM", desc: "Ideation to MVP." },
-  { phase: "Day 1", title: "Ideation Kickoff", time: "11:30 AM", desc: "Teams form & build." },
-  { phase: "Break", title: "Lunch", time: "12:30 PM", desc: "Refuel.", isBreak: true },
-  { phase: "Day 1", title: "Deep Dive", time: "02:00 PM", desc: "Core development." },
-  { phase: "Day 2", title: "Final Sprint", time: "09:00 AM", desc: "Bug squashing & polish." },
-  { phase: "Day 2", title: "Pitches", time: "10:00 AM", desc: "Preliminary pitches." },
-  { phase: "Break", title: "Deliberation", time: "11:30 AM", desc: "Judges score.", isBreak: true },
-  { phase: "Day 2", title: "Finale & Awards", time: "12:00 PM", desc: "Top finalists & winners." },
+const day1 = [
+  {
+    time: "09:00 AM - 10:00 AM",
+    title: "The Convergence: Team Formation & Keynote",
+    desc: "Participants arrive, register, and sync up. Opening remarks kick off the event, setting the stage for the challenge ahead as participants finalize their teams.",
+    highlight: false,
+  },
+  {
+    time: "10:00 AM - 10:45 AM",
+    title: "Domain Reveal & Ideation Masterclass",
+    desc: "Official release of the overarching domains (e.g., Industrial Digital Twins, Autonomous Navigation, Smart Healthcare). An expert-led masterclass on scoping features and building a resilient project framework.",
+    highlight: false,
+  },
+  {
+    time: "10:45 AM - 11:45 AM",
+    title: "The Auction Block: Problem Statement Bidding",
+    desc: "A high-energy session where teams use virtual points to bid on specific, high-value problem statements. Strategic resource allocation begins here—do you secure the easiest problem or risk it for the highest multiplier?",
+    highlight: "cyan",
+  },
+  {
+    time: "11:45 AM - 01:00 PM",
+    title: "Hacking Kickoff & Initial Build",
+    desc: "Teams transition into their designated zones, brainstorm solutions tailored to their acquired problem statements, and begin setting up their initial tech stack and environments.",
+    highlight: false,
+  },
+  {
+    time: "01:00 PM - 02:00 PM",
+    title: "Lunch & Strategy Sync",
+    desc: "A brief interlude to refuel and align on the afternoon development sprint.",
+    highlight: false,
+  },
+  {
+    time: "02:00 PM - 03:30 PM",
+    title: "Deep Dive Hacking & Mentorship",
+    desc: "The core development block. Mentors circulate the room for active checkpoints, architectural guidance, and rapid technical troubleshooting.",
+    highlight: false,
+  },
+  {
+    time: "03:30 PM - 04:30 PM",
+    title: "The Power-Up Hour!",
+    desc: 'A disruptive, fun mid-day challenge. Teams compete in rapid-fire trivia or mini-games to win Power-ups. Perks include "Skip the Mentorship Queue", "5 Extra Minutes for Pitch Prep", or "Minor Constraint Veto".',
+    highlight: "yellow",
+  },
+  {
+    time: "04:30 PM - 05:30 PM",
+    title: "Pitch Prep & Day 1 Wrap-up",
+    desc: "Teams pivot from raw coding to storytelling. They begin drafting their slide decks and core narrative so they aren't starting from scratch the next morning.",
+    highlight: false,
+  },
 ];
 
+const day2 = [
+  {
+    time: "09:00 AM - 10:00 AM",
+    title: "Final Sprint & Submission",
+    desc: "One final hour to squash bugs, polish presentation slides, and officially submit project links and decks to the portal.",
+    highlight: false,
+  },
+  {
+    time: "10:00 AM - 11:30 AM",
+    title: "Round 1: Preliminary Pitches",
+    desc: "Parallel judging tracks operate simultaneously. Each team gets a strict 4-minute pitch + 2-minute Q&A to lock in a spot for the finals. Prototype demonstrations are highly encouraged.",
+    highlight: false,
+  },
+  {
+    time: "11:30 AM - 12:00 PM",
+    title: "Deliberation & Networking Break",
+    desc: "Judges tally scores to select the top finalists while participants take a breather and network. Finalists are announced promptly at 12:00 PM.",
+    highlight: false,
+  },
+  {
+    time: "12:00 PM - 01:30 PM",
+    title: "Grand Finale: Top Finalists Pitch",
+    desc: "The chosen finalists take the main stage to pitch directly to the entire main jury panel and all attendees. High stakes, maximum visibility.",
+    highlight: "pink",
+  },
+  {
+    time: "01:30 PM - 02:00 PM",
+    title: "The Verdict: Closing Ceremony & Awards",
+    desc: "Final remarks, overall judge feedback, and the highly anticipated announcement of the winners.",
+    highlight: false,
+  },
+];
+
+const dotColor: Record<string, string> = {
+  cyan: "bg-neon-cyan",
+  yellow: "bg-neon-yellow",
+  pink: "bg-neon-pink",
+  false: "bg-neon-mint",
+};
+
+const accentColor: Record<string, string> = {
+  cyan: "border-l-neon-cyan bg-neon-cyan/10",
+  yellow: "border-l-neon-yellow bg-neon-yellow/10",
+  pink: "border-l-neon-pink bg-neon-pink/10",
+  false: "border-l-kraft-dark",
+};
+
+const timeColor: Record<string, string> = {
+  cyan: "text-neon-cyan",
+  yellow: "text-neon-yellow",
+  pink: "text-neon-pink",
+  false: "text-ink-light",
+};
+
+function TimelineItem({ item, index }: { item: any; index: number }) {
+  const h = item.highlight ? String(item.highlight) : "false";
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, delay: index * 0.07, ease: "easeOut" }}
+      className="relative flex gap-5 group"
+    >
+      {/* Left dot + line */}
+      <div className="flex flex-col items-center">
+        <div className={`w-4 h-4 rounded-full border-2 border-ink flex-shrink-0 mt-1 z-10 ${dotColor[h]} shadow-[2px_2px_0px_rgba(26,26,26,0.4)]`} />
+        <div className="w-0.5 flex-1 bg-ink/20 mt-1" />
+      </div>
+
+      {/* Card */}
+      <div className={`mb-6 flex-1 border-l-4 pl-4 pb-4 ${accentColor[h]}`}>
+        <p className={`font-mono text-xs font-bold mb-1 ${timeColor[h]}`}>{item.time}</p>
+        <h4 className="font-marker text-xl text-ink leading-tight mb-1">{item.title}</h4>
+        <p className="font-sans text-sm text-ink-light leading-relaxed">{item.desc}</p>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Timeline() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [svgPath, setSvgPath] = useState("");
-
-  const calculatePath = useCallback(() => {
-    if (!containerRef.current) return;
-    const containerRect = containerRef.current.getBoundingClientRect();
-    
-    // We only draw lines on desktop (md breakpoint) because mobile stack doesn't need this kind of string wiring
-    if (window.innerWidth < 768) {
-      setSvgPath("");
-      return;
-    }
-
-    let path = "";
-    
-    // The items should snake through the grid
-    // Row 1: 0 -> 1 -> 2
-    // Row 2: 2 -> 5 -> 4 -> 3
-    // Row 3: 3 -> 6 -> 7 -> 8
-    // To keep it simple, let's just connect them in order 0 to 8
-    
-    for (let i = 0; i < timelineData.length; i++) {
-      const card = cardRefs.current[i];
-      if (!card) continue;
-      
-      const rect = card.getBoundingClientRect();
-      
-      // Calculate center top of the card relative to the container
-      const x = rect.left - containerRect.left + rect.width / 2;
-      const y = rect.top - containerRect.top; // The pin is roughly at the top
-      
-      if (i === 0) {
-        path += `M ${x} ${y} `;
-      } else {
-        // Curve to the next pin
-        const prevCard = cardRefs.current[i - 1];
-        if (!prevCard) continue;
-        const prevRect = prevCard.getBoundingClientRect();
-        const prevX = prevRect.left - containerRect.left + prevRect.width / 2;
-        const prevY = prevRect.top - containerRect.top;
-        
-        // Control points for a nice curve
-        const cp1X = prevX + (x - prevX) / 2;
-        const cp1Y = prevY - 30; // arc up
-        const cp2X = prevX + (x - prevX) / 2;
-        const cp2Y = y - 30; // arc up
-
-        path += `C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${x} ${y} `;
-      }
-    }
-    setSvgPath(path);
-  }, []);
-
-  useEffect(() => {
-    // Initial calculation
-    // Timeout to ensure layout is complete
-    const timeout = setTimeout(calculatePath, 100);
-    
-    window.addEventListener("resize", calculatePath);
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener("resize", calculatePath);
-    };
-  }, [calculatePath]);
-
   return (
     <section className="py-24 relative overflow-hidden">
-      <div className="max-w-5xl mx-auto px-4">
-        
-        <div className="text-center mb-16 relative">
-          <div className="tape -top-4 left-1/2 -translate-x-1/2 rotate-2"></div>
+      <div className="max-w-6xl mx-auto px-4">
+
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16 relative"
+        >
+          <div className="tape -top-4 left-1/2 -translate-x-1/2 rotate-2" />
           <h2 className="font-marker text-5xl text-ink inline-block bg-neon-yellow px-6 py-2 wobbly-border shadow-[4px_4px_0px_rgba(26,26,26,1)] -rotate-1">
             Timeline Map
           </h2>
-        </div>
+          <p className="font-sans text-ink-light mt-6 text-lg">September 12th, 2026 · 9:00 AM Onwards</p>
+        </motion.div>
 
-        <div ref={containerRef} className="relative border-4 border-kraft-dark bg-canvas p-8 md:p-16 rounded-md shadow-xl wobbly-border">
-          {/* SVG String connecting pins */}
-          {svgPath && (
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-              <motion.path 
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                transition={{ duration: 2, ease: "easeInOut" }}
-                viewport={{ once: true }}
-                d={svgPath} 
-                fill="transparent" 
-                stroke="var(--color-neon-pink)" 
-                strokeWidth="3" 
-                strokeDasharray="8 8" 
-                strokeLinecap="round"
-                className="hidden md:block"
-              />
-            </svg>
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-            {timelineData.map((item, index) => (
-              <motion.div
-                key={index}
-                ref={(el) => { cardRefs.current[index] = el; }}
-                initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
-                className={`polaroid relative ${item.isBreak ? 'rotate-3' : (index % 2 === 0 ? '-rotate-2' : 'rotate-1')} hover:z-20`}
-              >
-                {/* Pin */}
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-neon-cyan shadow-sm border border-ink/50 z-10">
-                  <div className="absolute inset-1 rounded-full bg-paper/40"></div>
-                </div>
+          {/* Day 1 */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-paper border-4 border-ink p-6 shadow-[6px_6px_0px_rgba(26,26,26,1)] wobbly-border-alt relative"
+          >
+            <div className="tape -top-3 left-8 rotate-3" />
+            <div className="inline-block bg-ink text-neon-cyan font-marker text-2xl px-4 py-2 mb-6 -rotate-1 shadow-[4px_4px_0px_rgba(78,205,196,0.4)]">
+              DAY 1: STRATEGY, BIDDING & BUILDING
+            </div>
+            <div>
+              {day1.map((item, i) => (
+                <TimelineItem key={i} item={item} index={i} />
+              ))}
+            </div>
+          </motion.div>
 
-                <div className={`font-mono text-xs mb-2 px-2 py-1 inline-block border-2 border-ink ${item.isBreak ? 'bg-neon-yellow' : 'bg-neon-mint'}`}>
-                  {item.time} | {item.phase}
-                </div>
-                <h3 className="font-marker text-2xl text-ink leading-tight mb-2">
-                  {item.title}
-                </h3>
-                <p className="font-sans text-sm text-ink-light">
-                  {item.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
+          {/* Day 2 */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="bg-paper border-4 border-ink p-6 shadow-[6px_6px_0px_rgba(26,26,26,1)] wobbly-border relative"
+          >
+            <div className="tape -top-3 right-8 -rotate-2" />
+            <div className="inline-block bg-ink text-neon-pink font-marker text-2xl px-4 py-2 mb-6 rotate-1 shadow-[4px_4px_0px_rgba(255,107,107,0.4)]">
+              DAY 2: REFINEMENT, PITCHES & GRAND FINALE
+            </div>
+            <div>
+              {day2.map((item, i) => (
+                <TimelineItem key={i} item={item} index={i} />
+              ))}
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>

@@ -75,16 +75,31 @@ export default function Hero() {
         
         {/* Left: Content */}
         <div className="flex flex-col gap-6 justify-center">
-          <div className="inline-block px-4 py-1 bg-ink text-canvas font-marker text-xl w-fit -rotate-2 wobbly-border shadow-[4px_4px_0px_rgba(255,107,107,1)]">
+          <motion.div
+            initial={{ opacity: 0, y: -20, rotate: -4 }}
+            animate={{ opacity: 1, y: 0, rotate: -2 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="inline-block px-4 py-1 bg-ink text-canvas font-marker text-xl w-fit -rotate-2 wobbly-border shadow-[4px_4px_0px_rgba(255,107,107,1)]"
+          >
             IEEE PCS PRESENTS
-          </div>
+          </motion.div>
           
-          <h1 className="font-marker text-7xl md:text-9xl text-ink leading-none">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
+            className="font-marker text-7xl md:text-9xl text-ink leading-none"
+          >
             PlaceIT <span className="text-5xl md:text-7xl text-ink-light ml-2">5.0</span>
-          </h1>
+          </motion.h1>
 
           {/* Countdown Timer */}
-          <div className="flex gap-4 font-mono font-bold text-2xl text-ink mt-2">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex gap-4 font-mono font-bold text-2xl text-ink mt-2"
+          >
             <div className="flex flex-col items-center bg-paper p-3 wobbly-border-alt shadow-[4px_4px_0px_rgba(26,26,26,1)] rotate-1">
               <span className="text-neon-pink text-4xl">{String(timeLeft.days).padStart(2, '0')}</span>
               <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Days</span>
@@ -104,11 +119,16 @@ export default function Hero() {
               <span className="text-neon-yellow text-4xl">{String(timeLeft.seconds).padStart(2, '0')}</span>
               <span className="text-xs uppercase text-ink-light tracking-widest mt-1">Secs</span>
             </div>
-          </div>
+          </motion.div>
           
-          <p className="font-sans text-xl text-ink-light max-w-lg font-medium bg-paper/50 p-4 wobbly-border-alt mt-2">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.45 }}
+            className="font-sans text-xl text-ink-light max-w-lg font-medium bg-paper/50 p-4 wobbly-border-alt mt-2"
+          >
             Grab a marker. Join a team. Build tangible prototypes from raw concepts in our ultimate whiteboard session.
-          </p>
+          </motion.p>
 
           {/* Add Sticky Note Form */}
           <form onSubmit={addSticky} className="mt-8 bg-kraft-dark/20 p-6 wobbly-border relative max-w-md">
