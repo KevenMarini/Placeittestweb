@@ -42,6 +42,10 @@ export default function AdminPage() {
   const [editingUser, setEditingUser] = useState<any | null>(null);
   const [editingSubAdmin, setEditingSubAdmin] = useState<any | null>(null);
 
+  // Presentations
+  const [presentations, setPresentations] = useState<any[]>([]);
+  const [presentationsUnlocked, setPresentationsUnlocked] = useState(false);
+
   useEffect(() => {
     const userStr = localStorage.getItem("placeit_user");
     if (!userStr) {
@@ -71,12 +75,14 @@ export default function AdminPage() {
       fetch("/api/admin/announcements").then(res => res.json()),
       fetch("/api/admin/statements").then(res => res.json()),
       fetch("/api/admin/contact").then(res => res.json()),
-    ]).then(([usersData, teamsData, annData, stmtsData, contactData]) => {
+      fetch("/api/admin/presentations").then(res => res.json()),
+    ]).then(([usersData, teamsData, annData, stmtsData, contactData, presData]) => {
       if (usersData.success) setUsers(usersData.users);
       if (teamsData.success) setTeams(teamsData.teams);
       if (annData.success) setAnnouncements(annData.announcements);
       if (stmtsData.success) setStatements(stmtsData.statements);
       if (contactData.success) setContactLinks(contactData.links);
+      if (presData.success) { setPresentations(presData.submissions); setPresentationsUnlocked(presData.isUnlocked); }
     });
 
     if (currentUser.role === "main_admin") {
@@ -265,6 +271,7 @@ export default function AdminPage() {
     { id: "participants", label: "Participants" },
     { id: "teams", label: "Teams" },
     { id: "domains", label: "Domains" },
+    { id: "presentations", label: "📊 Presentations" },
     { id: "announcements", label: "Announcements" },
     { id: "contact", label: "Contact Page" },
     ...(admin.role === "main_admin" ? [
@@ -272,6 +279,29 @@ export default function AdminPage() {
       { id: "logs", label: "Logs" }
     ] : [])
   ];
+  const togglePresentationLock = async () => {
+    const res = await fetch("/api/admin/presentations", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ adminUser: admin.username, unlock: !presentationsUnlocked })
+    });
+    const data = await res.json();
+    if (data.success) {
+      setPresentationsUnlocked(data.isUnlocked);
+      fetchData(admin);
+    }
+  };
+
+  const deletePresentation = async (id: string, teamName: string) => {
+    if (!confirm(`Delete presentation submission for "${teamName}"?`)) return;
+    await fetch("/api/admin/presentations", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, adminUser: admin.username })
+    });
+    fetchData(admin);
+  };
+
 
   const uniqueDomains = Array.from(new Set(statements.map(s => s.domain)));
 
@@ -586,6 +616,61 @@ export default function AdminPage() {
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {activeTab === "presentations" && (
+          <div className="bg-canvas p-6 shadow-md wobbly-border border-4 border-ink bg-paper">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="font-marker text-3xl text-ink">Presentations</h2>
+              <button
+                onClick={togglePresentationLock}
+                className={`font-bold px-4 py-2 border-2 border-ink shadow-[4px_4px_0px_rgba(26,26,26,1)] transition-transform hover:-translate-y-1 ${
+                  presentationsUnlocked 
+                    ? "bg-neon-pink text-white hover:bg-red-500" 
+                    : "bg-neon-mint text-ink hover:bg-neon-cyan"
+                }`}
+              >
+                {presentationsUnlocked ? "🔓 Submissions Open (Click to Lock)" : "🔒 Submissions Locked (Click to Unlock)"}
+              </button>
+            </div>
+
+            <div className="overflow-x-auto mt-4">
+              <table className="w-full text-left font-sans border-collapse">
+                <thead>
+                  <tr className="border-b-4 border-ink bg-neon-yellow text-ink">
+                    <th className="p-3">Team Name</th>
+                    <th className="p-3">Link</th>
+                    <th className="p-3">Submitted At</th>
+                    <th className="p-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {presentations.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="p-6 text-center text-ink-light italic">No presentations submitted yet.</td>
+                    </tr>
+                  ) : (
+                    presentations.map(p => (
+                      <tr key={p.id} className="border-b-2 border-ink border-dashed hover:bg-canvas/50">
+                        <td className="p-3 font-bold text-ink">{p.teamName}</td>
+                        <td className="p-3">
+                          <a href={p.link} target="_blank" rel="noopener noreferrer" className="text-neon-cyan underline decoration-wavy hover:text-neon-pink break-all">
+                            {p.link}
+                          </a>
+                        </td>
+                        <td className="p-3 text-xs text-ink-light">{new Date(p.createdAt).toLocaleString()}</td>
+                        <td className="p-3">
+                          <button onClick={() => deletePresentation(p.id, p.teamName)} className="text-xs bg-red-100 text-red-600 font-bold px-3 py-1 border border-red-300 hover:bg-red-200">
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
