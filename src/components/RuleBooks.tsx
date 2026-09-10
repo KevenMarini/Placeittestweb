@@ -5,14 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const AUCTION_PAGES = [
   // Page 0 (Cover)
-  <div className="flex flex-col h-full justify-center items-center text-center p-6 bg-neon-pink/20 h-[400px]">
+  <div className="flex flex-col h-full justify-center items-center text-center p-6 bg-neon-pink/20 h-[600px]">
     <div className="text-6xl mb-6">⚖️</div>
     <h2 className="font-marker text-4xl text-ink mb-4 leading-tight">Problem Statement<br/>Auction</h2>
     <h3 className="font-sans text-xl font-bold uppercase tracking-widest text-ink">Guidelines</h3>
     <p className="mt-8 font-mono text-sm border-2 border-ink px-4 py-1 bg-paper">Open Book →</p>
   </div>,
   // Page 1
-  <div className="p-6 h-[400px] overflow-y-auto bg-paper">
+  <div className="p-6 h-[600px] overflow-y-auto bg-paper pb-20">
     <h3 className="font-marker text-2xl mb-4 border-b-2 border-ink pb-2 text-neon-pink">1. Auction Credits</h3>
     <ul className="list-disc pl-5 font-sans text-sm space-y-2 mb-6 text-ink">
       <li>Every team starts the auction with <strong>120 credits</strong>.</li>
@@ -28,7 +28,7 @@ const AUCTION_PAGES = [
     </ul>
   </div>,
   // Page 2
-  <div className="p-6 h-[400px] overflow-y-auto bg-paper">
+  <div className="p-6 h-[600px] overflow-y-auto bg-paper pb-20">
     <h3 className="font-marker text-2xl mb-4 border-b-2 border-ink pb-2 text-neon-pink">3. How Bidding Works</h3>
     <ul className="list-disc pl-5 font-sans text-sm space-y-2 mb-6 text-ink">
       <li>The auctioneer announces one Problem Statement at a time for bidding.</li>
@@ -43,7 +43,7 @@ const AUCTION_PAGES = [
     </ul>
   </div>,
   // Page 3
-  <div className="p-6 h-[400px] overflow-y-auto bg-paper">
+  <div className="p-6 h-[600px] overflow-y-auto bg-paper pb-20">
     <h3 className="font-marker text-2xl mb-4 border-b-2 border-ink pb-2 text-neon-pink">5. One Team, One PS</h3>
     <ul className="list-disc pl-5 font-sans text-sm space-y-2 mb-6 text-ink">
       <li>Each team may win <strong>only one</strong> Problem Statement for the entire auction.</li>
@@ -57,7 +57,7 @@ const AUCTION_PAGES = [
     </ul>
   </div>,
   // Page 4
-  <div className="p-6 h-[400px] overflow-y-auto bg-paper">
+  <div className="p-6 h-[600px] overflow-y-auto bg-paper pb-20">
     <h3 className="font-marker text-2xl mb-4 border-b-2 border-ink pb-2 text-neon-pink">7. Strategic Tips</h3>
     <ul className="list-disc pl-5 font-sans text-sm space-y-2 mb-6 text-ink">
       <li>Review every domain and Problem Statement before bidding begins; you can't undo a win.</li>
@@ -79,13 +79,13 @@ const AUCTION_PAGES = [
 ];
 
 const EVENT_PAGES = [
-  <div className="flex flex-col h-full justify-center items-center text-center p-6 bg-neon-cyan/20 h-[400px]">
+  <div className="flex flex-col h-full justify-center items-center text-center p-6 bg-neon-cyan/20 h-[600px]">
     <div className="text-6xl mb-6">📜</div>
     <h2 className="font-marker text-4xl text-ink mb-4 leading-tight">Event<br/>Guidelines</h2>
     <h3 className="font-sans text-xl font-bold uppercase tracking-widest text-ink">Rulebook</h3>
     <p className="mt-8 font-mono text-sm border-2 border-ink px-4 py-1 bg-paper">Open Book →</p>
   </div>,
-  <div className="flex flex-col h-full justify-center items-center text-center p-6 h-[400px] bg-paper">
+  <div className="flex flex-col h-full justify-center items-center text-center p-6 h-[600px] bg-paper">
     <div className="text-6xl mb-4">🚧</div>
     <h2 className="font-marker text-3xl text-ink mb-2">Coming Soon</h2>
     <p className="font-sans text-sm text-ink-light max-w-xs mx-auto">
